@@ -478,6 +478,13 @@ button {
   gap: 14px;
 }
 
+.practice-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .question-brief__label {
   margin: 0 0 8px;
   font-size: 0.92rem;
@@ -489,6 +496,22 @@ button {
 
 .question-brief__block {
   margin: 0;
+}
+
+.practice-editor-shell {
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(33, 41, 52, 0.08);
+  background: rgba(29, 38, 48, 0.04);
+}
+
+.practice-editor .cm-editor {
+  font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 0.95rem;
+}
+
+.practice-editor .cm-scroller {
+  font-family: inherit;
 }
 
 .choice-card {

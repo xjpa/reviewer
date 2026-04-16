@@ -46,6 +46,7 @@ export interface Question {
   exampleInput?: string
   exampleOutput?: string
   codeSnippet?: string
+  practiceStarterCode?: string
   type: QuestionType
   choices: Choice[]
   correctChoiceIds: string[]

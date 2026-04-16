@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
+import CodeMirror from '@uiw/react-codemirror'
+import { python } from '@codemirror/lang-python'
 import './App.css'
 import { buildTrackFromDecks, loadAllDeckContents, loadDeckContent, type DeckFile, trackManifest } from './data/content'
 import {
@@ -39,6 +41,8 @@ function App() {
   const [selectedDeckId, setSelectedDeckId] = useState<string | null>(null)
   const [isLoadingDecks, setIsLoadingDecks] = useState(false)
   const [now, setNow] = useState(() => Date.now())
+  const [practiceCodeByQuestionId, setPracticeCodeByQuestionId] = useState<Record<string, string>>({})
+  const [showPracticeEditor, setShowPracticeEditor] = useState(false)
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000)
@@ -109,6 +113,14 @@ function App() {
 
     setDraftSelection(activeSession.draftSelectionByQuestionId[currentQuestion.id] ?? [])
     setSubmittedAnswer(activeSession.submittedAnswerByQuestionId[currentQuestion.id] ?? null)
+    setPracticeCodeByQuestionId((current) =>
+      current[currentQuestion.id]
+        ? current
+        : {
+            ...current,
+            [currentQuestion.id]: getPracticeStarterCode(currentQuestion),
+          },
+    )
   }, [activeSession, currentQuestion])
 
   const preloadDecks = async () => {
@@ -603,9 +615,18 @@ function App() {
           )}
           draftSelection={draftSelection}
           submittedAnswer={submittedAnswer}
+          practiceCode={practiceCodeByQuestionId[currentQuestion.id] ?? getPracticeStarterCode(currentQuestion)}
+          showPracticeEditor={showPracticeEditor && currentQuestion.unitId === 'algorithms'}
           onQuit={abandonSession}
           onSubmit={submitCurrent}
           onToggleChoice={toggleChoice}
+          onTogglePracticeEditor={() => setShowPracticeEditor((current) => !current)}
+          onPracticeCodeChange={(value) =>
+            setPracticeCodeByQuestionId((current) => ({
+              ...current,
+              [currentQuestion.id]: value,
+            }))
+          }
           onPrevious={() => navigateQuestion(-1)}
           onNext={() => navigateQuestion(1)}
           onFinish={finishSession}
@@ -668,9 +689,13 @@ function PracticeView({
   countdown,
   draftSelection,
   submittedAnswer,
+  practiceCode,
+  showPracticeEditor,
   onQuit,
   onSubmit,
   onToggleChoice,
+  onTogglePracticeEditor,
+  onPracticeCodeChange,
   onPrevious,
   onNext,
   onFinish,
@@ -680,9 +705,13 @@ function PracticeView({
   countdown: number
   draftSelection: string[]
   submittedAnswer: SessionAnswer | null
+  practiceCode: string
+  showPracticeEditor: boolean
   onQuit: () => void
   onSubmit: () => void
   onToggleChoice: (choiceId: string) => void
+  onTogglePracticeEditor: () => void
+  onPracticeCodeChange: (value: string) => void
   onPrevious: () => void
   onNext: () => void
   onFinish: () => void
@@ -760,6 +789,34 @@ function PracticeView({
               <div>
                 <p className="question-brief__label">Example Output</p>
                 <pre className="study-note question-brief__block">{currentQuestion.exampleOutput}</pre>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+        {currentQuestion.unitId === 'algorithms' ? (
+          <div className="question-brief">
+            <div className="practice-toggle-row">
+              <p className="question-brief__label">Practice Editor</p>
+              <button className="text-button" onClick={onTogglePracticeEditor} type="button">
+                {showPracticeEditor ? 'Hide editor' : 'Show editor'}
+              </button>
+            </div>
+            {showPracticeEditor ? (
+              <div className="practice-editor-shell">
+                <CodeMirror
+                  basicSetup={{
+                    lineNumbers: true,
+                    foldGutter: false,
+                    highlightActiveLine: true,
+                    highlightActiveLineGutter: false,
+                  }}
+                  className="practice-editor"
+                  extensions={[python()]}
+                  height="260px"
+                  indentWithTab
+                  value={practiceCode}
+                  onChange={onPracticeCodeChange}
+                />
               </div>
             ) : null}
           </div>
@@ -901,6 +958,18 @@ function labelMode(mode: Session['mode']) {
 
   const unit = trackManifest.decks.find((item) => item.id === mode.unitId)
   return unit ? unit.title : 'Deck practice'
+}
+
+function getPracticeStarterCode(question: Question) {
+  if (question.practiceStarterCode) {
+    return question.practiceStarterCode
+  }
+
+  return [
+    '# Type your Python solution here',
+    question.problemDescription ? `# ${question.problemDescription}` : '# Solve the problem',
+    '',
+  ].join('\n')
 }
 
 export default App
