@@ -40,11 +40,18 @@ export interface Question {
   unitId: string
   chapterId: string
   prompt: string
+  problemDescription?: string
+  inputFormat?: string
+  outputFormat?: string
+  exampleInput?: string
+  exampleOutput?: string
   codeSnippet?: string
   type: QuestionType
   choices: Choice[]
   correctChoiceIds: string[]
   explanation: string
+  firstPrinciples?: string[]
+  tips?: string[]
   studyNote?: string
   estimatedSeconds: number
 }
@@ -80,6 +87,8 @@ export interface Session {
   questionIds: string[]
   currentIndex: number
   answers: SessionAnswerRecord[]
+  draftSelectionByQuestionId: Record<string, string[]>
+  submittedAnswerByQuestionId: Record<string, SessionAnswer>
   choiceOrderByQuestionId: Record<string, string[]>
   startedAt: number
   questionStartedAt: number

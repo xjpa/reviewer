@@ -20,6 +20,8 @@ export function createSession(mode: Session['mode'], questionIds: string[]): Ses
     questionIds: ids,
     currentIndex: 0,
     answers: [],
+    draftSelectionByQuestionId: {},
+    submittedAnswerByQuestionId: {},
     choiceOrderByQuestionId: {},
     startedAt: Date.now(),
     questionStartedAt: Date.now(),

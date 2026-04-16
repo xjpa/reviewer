@@ -5,12 +5,13 @@
   "decks": [
     {
       "id": "algorithms",
-      "title": "Algorithms (Java)",
-      "description": "Build passable interview fluency in Java through practical fundamentals: input parsing, numbers, strings, arithmetic, and arrays.",
-      "questionCount": 10,
+      "title": "Algorithms (Python)",
+      "description": "Build passable interview fluency in Python through practical fundamentals: input parsing, pattern printing, numbers, strings, arithmetic, and arrays.",
+      "questionCount": 28,
       "chapters": [
-        { "id": "input-parsing", "title": "Input Parsing", "focus": "Read ints, strings, arrays, and test cases without fumbling Java I/O.", "questionCount": 6 },
-        { "id": "numbers", "title": "Numbers", "focus": "Master the standard number problems that show up constantly in beginner interviews.", "questionCount": 1 },
+        { "id": "input-parsing", "title": "Input Parsing", "focus": "Read ints, strings, lists, and test cases without fumbling Python I/O.", "questionCount": 6 },
+        { "id": "pattern-printing", "title": "Pattern Printing", "focus": "Build row/column thinking with classic star, number, and character patterns.", "questionCount": 9 },
+        { "id": "numbers", "title": "Numbers", "focus": "Master the standard number problems that show up constantly in beginner interviews.", "questionCount": 10 },
         { "id": "string-manipulation", "title": "String Manipulation", "focus": "Traverse, compare, rebuild, and inspect strings safely.", "questionCount": 1 },
         { "id": "arithmetic-binary", "title": "Arithmetic & Binary Conversion", "focus": "Work through number logic, divisibility, and base conversion step by step.", "questionCount": 1 },
         { "id": "arrays", "title": "Arrays", "focus": "Scan, update, and summarize arrays without index mistakes.", "questionCount": 1 }

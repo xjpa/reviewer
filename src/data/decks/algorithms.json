@@ -1,13 +1,13 @@
 {
   "id": "algorithms",
-  "title": "Algorithms (Java)",
-  "description": "Build passable interview fluency in Java through practical fundamentals: problem solving, strings, arithmetic/binary conversion, and arrays.",
+  "title": "Algorithms (Python)",
+  "description": "Build passable interview fluency in Python through practical fundamentals: input parsing, pattern printing, numbers, strings, arithmetic and binary conversion, and arrays.",
   "reviewer": {
-    "summary": "For your Java prep, the goal is to memorize the standard code patterns and library choices that solve beginner interview problems fast. Think in terms of code templates, not vague theory.",
+    "summary": "For your Python prep, the goal is to memorize the standard code patterns and library choices that solve beginner interview problems fast. Think in terms of code templates, not vague theory.",
     "interviewFocus": [
-      "Do you know which Java library or class to reach for immediately?",
+      "Do you know which Python built-in, method, or module to reach for immediately?",
       "Can you write the standard template from memory with minimal hesitation?",
-      "Can you solve simple problems like leap year, reverse string, binary conversion, and array scans in clean Java?",
+      "Can you solve simple problems like leap year, reverse string, binary conversion, and array scans in clean Python?",
       "Can you explain why you chose that tool instead of improvising badly?"
     ],
     "sections": [
@@ -15,8 +15,8 @@
         "id": "must-know",
         "title": "Must Know In Time For Interviews",
         "points": [
-          "Memorize clean Java templates for input parsing, if-else decision problems, StringBuilder usage, arithmetic/base conversion loops, and array traversal.",
-          "Know the standard library tools that commonly appear in simple coding rounds: BufferedReader, StringTokenizer, Scanner, StringBuilder, Arrays, ArrayList, HashMap, and Math.",
+          "Memorize clean Python templates for input parsing, nested-loop pattern printing, if-else decision problems, string building, arithmetic/base conversion loops, and list traversal.",
+          "Know the standard tools that commonly appear in simple coding rounds: input, split, map, list, range, len, collections.Counter, math.gcd, and string slicing.",
           "Practice small real tasks like even or odd, leap year, prime number, palindrome number, factorial, Fibonacci, sum of digits, reverse digits, GCD or LCM, and finding factors or divisors."
         ]
       },
@@ -25,9 +25,10 @@
         "title": "Suggested Crash-Course Sequence",
         "points": [
           "Start with input parsing until reading ints, strings, arrays, and test cases feels automatic.",
+          "Then drill pattern printing until row/column reasoning with nested loops feels obvious.",
           "Then drill core number problems like parity, leap year, prime checks, palindrome numbers, factorial, Fibonacci, digit sums, reverse digits, GCD or LCM, and divisors.",
-          "Then memorize string templates with StringBuilder and charAt.",
-          "After that, rehearse arithmetic and binary conversion loops, then finish with array traversal and Arrays helper methods."
+          "Then memorize string templates with slicing, join, and indexed traversal.",
+          "After that, rehearse arithmetic and binary conversion loops, then finish with list traversal and sorting helpers."
         ]
       },
       {
@@ -35,7 +36,7 @@
         "title": "What Usually Fails People",
         "points": [
           "Forgetting how to read input quickly and wasting time on boilerplate under pressure.",
-          "Forgetting the exact Java library or method signature they actually need.",
+          "Forgetting the exact Python built-in or method they actually need.",
           "Writing code from first principles every time instead of using a memorized template.",
           "Making index and condition mistakes on easy problems because the base pattern was not fully internalized."
         ]
@@ -43,7 +44,8 @@
     ]
   },
   "chapters": [
-    { "id": "input-parsing", "title": "Input Parsing", "focus": "Read ints, strings, arrays, and test cases without fumbling Java I/O." },
+    { "id": "input-parsing", "title": "Input Parsing", "focus": "Read ints, strings, lists, and test cases without fumbling Python I/O." },
+    { "id": "pattern-printing", "title": "Pattern Printing", "focus": "Build row/column thinking with classic star, number, and character patterns." },
     { "id": "numbers", "title": "Numbers", "focus": "Master the standard number problems that show up constantly in beginner interviews." },
     { "id": "string-manipulation", "title": "String Manipulation", "focus": "Traverse, compare, rebuild, and inspect strings safely." },
     { "id": "arithmetic-binary", "title": "Arithmetic & Binary Conversion", "focus": "Work through number logic, divisibility, and base conversion step by step." },
@@ -55,18 +57,22 @@
       "code": "algo-i001",
       "unitId": "algorithms",
       "chapterId": "input-parsing",
-      "prompt": "For competitive-style Java input, which base setup is the strongest default to memorize first?",
-      "codeSnippet": "// goal: fast enough for many interview / CP input problems\n// choose the base setup you should know cold",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read one integer `n` and print that same integer.",
+      "inputFormat": "A single line containing one integer `n`.",
+      "outputFormat": "Print the integer `n` on its own line.",
+      "exampleInput": "42",
+      "exampleOutput": "42",
       "type": "single",
       "choices": [
-        { "id": "a", "label": "BufferedReader + StringTokenizer + StringBuilder" },
-        { "id": "b", "label": "JOptionPane dialogs for each number" },
-        { "id": "c", "label": "Recursive input parsing methods only" },
-        { "id": "d", "label": "Random access files for every coding problem" }
+        { "id": "a", "label": "n = int(input())" },
+        { "id": "b", "label": "n = input()" },
+        { "id": "c", "label": "n = list(map(int, input().split()))" },
+        { "id": "d", "label": "n = int(input().split()[0])" }
       ],
       "correctChoiceIds": ["a"],
-      "explanation": "If you want one Java I/O toolkit to memorize for interviews and competitive programming, BufferedReader for input, StringTokenizer for token splitting, and StringBuilder for output is the strongest default.",
-      "studyNote": "Canonical fast-I/O setup\n\nimport java.io.*;\nimport java.util.*;\n\nBufferedReader br = new BufferedReader(new InputStreamReader(System.in));\nStringBuilder out = new StringBuilder();",
+      "explanation": "For a single integer, the clean pattern is `n = int(input())`, then print `n`. `input()` alone returns a string, and `.split()` is only needed when the line contains multiple tokens.",
+      "studyNote": "Single-int input template\n\nn = int(input())\nprint(n)\n\nRelated basics:\ntext = input().strip()\nnums = list(map(int, input().split()))",
       "estimatedSeconds": 30
     },
     {
@@ -74,18 +80,22 @@
       "code": "algo-i002",
       "unitId": "algorithms",
       "chapterId": "input-parsing",
-      "prompt": "You need to read two integers from one line like `5 9`. Which code pattern should you memorize?",
-      "codeSnippet": "BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n// input line: 5 9",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "You are given two integers on the same line. Read them into `a` and `b`, then print their sum.",
+      "inputFormat": "A single line containing two space-separated integers `a` and `b`.",
+      "outputFormat": "Print `a + b`.",
+      "exampleInput": "5 9",
+      "exampleOutput": "14",
       "type": "single",
       "choices": [
-        { "id": "a", "label": "StringTokenizer st = new StringTokenizer(br.readLine()); int a = Integer.parseInt(st.nextToken()); int b = Integer.parseInt(st.nextToken());" },
-        { "id": "b", "label": "int a = br.readLine(); int b = br.readLine();" },
-        { "id": "c", "label": "StringTokenizer st = new StringTokenizer(); int a = st; int b = st;" },
-        { "id": "d", "label": "int a = Integer.parseInt(br); int b = Integer.parseInt(br);" }
+        { "id": "a", "label": "a, b = map(int, input().split())\nprint(a + b)" },
+        { "id": "b", "label": "a = int(input())\nb = int(input())\nprint(a + b)" },
+        { "id": "c", "label": "a, b = input().split()\nprint(a + b)" },
+        { "id": "d", "label": "a = int(input().split()[0])\nb = int(input().split()[1])\nprint(a + b)" }
       ],
       "correctChoiceIds": ["a"],
-      "explanation": "This is the bread-and-butter pattern: read the line, tokenize it, then parse each token into the target type.",
-      "studyNote": "Read multiple ints from one line\n\nStringTokenizer st = new StringTokenizer(br.readLine());\nint a = Integer.parseInt(st.nextToken());\nint b = Integer.parseInt(st.nextToken());",
+      "explanation": "This is the standard Python pattern for space-separated integers on one line: split the line into tokens, convert each token to int, unpack, then use the values.",
+      "studyNote": "Read multiple ints from one line\n\na, b = map(int, input().split())\nprint(a + b)",
       "estimatedSeconds": 35
     },
     {
@@ -93,18 +103,22 @@
       "code": "algo-i003",
       "unitId": "algorithms",
       "chapterId": "input-parsing",
-      "prompt": "You are given `n`, then a second line with `n` space-separated integers. What pattern is correct?",
-      "codeSnippet": "// input example:\n// 5\n// 10 20 30 40 50",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`, then read a list of `n` integers into `arr`, and print the sum of the list.",
+      "inputFormat": "The first line contains an integer `n`.\nThe second line contains `n` space-separated integers.",
+      "outputFormat": "Print the sum of the `n` integers.",
+      "exampleInput": "5\n10 20 30 40 50",
+      "exampleOutput": "150",
       "type": "single",
       "choices": [
-        { "id": "a", "label": "Read n, create int[] arr = new int[n], tokenize the next line, fill arr in a loop" },
-        { "id": "b", "label": "Read n and assume Java fills the array automatically from stdin" },
-        { "id": "c", "label": "Only parse the first token because arrays can resize later" },
-        { "id": "d", "label": "Sort before reading the values" }
+        { "id": "a", "label": "n = int(input())\narr = list(map(int, input().split()))\nprint(sum(arr))" },
+        { "id": "b", "label": "n = int(input())\narr = [input() for _ in range(n)]\nprint(sum(arr))" },
+        { "id": "c", "label": "n = int(input())\narr = int(input())\nprint(sum(arr))" },
+        { "id": "d", "label": "arr = list(map(int, input().split()))\nn = len(arr)\nprint(sum(arr))" }
       ],
       "correctChoiceIds": ["a"],
-      "explanation": "A lot of problems use the exact pattern: read size first, then tokenize the next line and fill the array sequentially.",
-      "studyNote": "Read an array template\n\nint n = Integer.parseInt(br.readLine());\nint[] arr = new int[n];\nStringTokenizer st = new StringTokenizer(br.readLine());\n\nfor (int i = 0; i < n; i++) {\n    arr[i] = Integer.parseInt(st.nextToken());\n}",
+      "explanation": "A lot of problems use the exact pattern: read the size first, then parse the next line into a list of ints.",
+      "studyNote": "Read a list template\n\nn = int(input())\narr = list(map(int, input().split()))",
       "estimatedSeconds": 35
     },
     {
@@ -112,18 +126,22 @@
       "code": "algo-i004",
       "unitId": "algorithms",
       "chapterId": "input-parsing",
-      "prompt": "Many problems begin with a test-case count `t`. Which loop structure should feel automatic?",
-      "codeSnippet": "// first line contains t\n// solve one case per iteration",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "The first line gives the number of test cases. Each test case contains one integer `n`. Print `n * 2` for every test case.",
+      "inputFormat": "The first line contains one integer `t`, the number of test cases.\nEach of the next `t` blocks belongs to one test case.",
+      "outputFormat": "For each test case, print `n * 2` on its own line.",
+      "exampleInput": "3\n5\n2\n9",
+      "exampleOutput": "10\n4\n18",
       "type": "single",
       "choices": [
-        { "id": "a", "label": "int t = Integer.parseInt(br.readLine()); while (t-- > 0) { /* solve one case */ }" },
-        { "id": "b", "label": "int t = Integer.parseInt(br.readLine()); if (t > 0) { /* solve all cases once */ }" },
-        { "id": "c", "label": "int t = Integer.parseInt(br.readLine()); for (;;) { /* stop when lucky */ }" },
-        { "id": "d", "label": "No loop is needed because t is only metadata" }
+        { "id": "a", "label": "t = int(input())\nfor _ in range(t):\n    n = int(input())\n    print(n * 2)" },
+        { "id": "b", "label": "t = int(input())\nif t > 0:\n    n = int(input())\n    print(n * 2)" },
+        { "id": "c", "label": "t = int(input())\nwhile True:\n    n = int(input())\n    print(n * 2)" },
+        { "id": "d", "label": "t = int(input())\nn = int(input())\nprint(n * 2)" }
       ],
       "correctChoiceIds": ["a"],
-      "explanation": "When a problem gives a test-case count, your body template should already be ready. The exact loop form can vary, but `while (t-- > 0)` is a standard one worth memorizing.",
-      "studyNote": "Test-case loop template\n\nint t = Integer.parseInt(br.readLine());\n\nwhile (t-- > 0) {\n    // read this case\n    // solve this case\n    // append output\n}",
+      "explanation": "When a problem gives a test-case count, your Python loop template should already be automatic.",
+      "studyNote": "Test-case loop template\n\nt = int(input())\nfor _ in range(t):\n    # read this case\n    # solve this case\n    # print or collect output",
       "estimatedSeconds": 30
     },
     {
@@ -131,18 +149,22 @@
       "code": "algo-i005",
       "unitId": "algorithms",
       "chapterId": "input-parsing",
-      "prompt": "Why is `StringBuilder` important in Java I/O-heavy problems?",
-      "codeSnippet": "// imagine printing one answer per test case",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "The first line contains `t`. Each test case then contains two integers `a` and `b`. Print `a + b` for each test case, one answer per line.",
+      "inputFormat": "The first line contains `t`.\nEach of the next `t` lines contains two space-separated integers `a` and `b`.",
+      "outputFormat": "For each test case, print `a + b` on its own line.",
+      "exampleInput": "3\n1 6\n5 7\n2 2",
+      "exampleOutput": "7\n12\n4",
       "type": "multi",
       "choices": [
-        { "id": "a", "label": "It helps accumulate output efficiently before printing once" },
-        { "id": "b", "label": "It is useful for building strings in loops without repeated costly concatenation" },
-        { "id": "c", "label": "It automatically parses integers from input" },
-        { "id": "d", "label": "It is often cleaner than many System.out.println calls inside tight loops" }
+        { "id": "a", "label": "t = int(input())\nanswers = []\nfor _ in range(t):\n    a, b = map(int, input().split())\n    answers.append(str(a + b))\nprint(\"\\n\".join(answers))" },
+        { "id": "b", "label": "t = int(input())\nanswers = []\nfor _ in range(t):\n    a, b = map(int, input().split())\n    answers.append(str(a + b))\nprint(\"\\n\".join(answers))" },
+        { "id": "c", "label": "import sys\n\nt = int(input())\nout = []\nfor _ in range(t):\n    a, b = map(int, input().split())\n    out.append(str(a + b))\nsys.stdout.write(\"\\n\".join(out))" },
+        { "id": "d", "label": "t = int(input())\nfor _ in range(t):\n    a, b = map(int, input().split())\n    print(\"\\n\".join(str(a + b)))" }
       ],
-      "correctChoiceIds": ["a", "b", "d"],
-      "explanation": "StringBuilder is mainly about output construction efficiency and cleaner repeated string assembly. It is not an input parser.",
-      "studyNote": "Output accumulation template\n\nStringBuilder out = new StringBuilder();\n\nout.append(answer).append('\\n');\nout.append(otherAnswer).append('\\n');\n\nSystem.out.print(out);",
+      "correctChoiceIds": ["a", "b", "c"],
+      "explanation": "This is the standard multi-test-case pattern: read `t`, parse each case, store each answer as a string, then print one answer per line. `sys.stdout.write` is also fine when used the same way.",
+      "studyNote": "Output accumulation template\n\nanswers = []\nanswers.append(str(answer))\nanswers.append(str(other_answer))\nprint(\"\\n\".join(answers))",
       "estimatedSeconds": 35
     },
     {
@@ -150,56 +172,636 @@
       "code": "algo-i006",
       "unitId": "algorithms",
       "chapterId": "input-parsing",
-      "prompt": "Which first-principles checklist is strongest when reading a new Java input format?",
-      "codeSnippet": "// before coding the solution, decode the input shape",
-      "type": "multi",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read a 2D grid of integers into `matrix`, then print the sum of the first row.",
+      "inputFormat": "The first line contains two integers `r` and `c`.\nThe next `r` lines each contain `c` space-separated integers, describing one row of the matrix.",
+      "outputFormat": "Print the sum of the integers in the first row.",
+      "exampleInput": "2 3\n1 2 3\n4 5 6",
+      "exampleOutput": "6",
+      "type": "single",
       "choices": [
-        { "id": "a", "label": "How many lines or tokens belong to one test case?" },
-        { "id": "b", "label": "What type is each token: int, long, string, char?" },
-        { "id": "c", "label": "Do I need an array, matrix, or just scalar variables?" },
-        { "id": "d", "label": "Can I ignore the input format and improvise later?" }
+        { "id": "a", "label": "r, c = map(int, input().split())\nmatrix = [list(map(int, input().split())) for _ in range(r)]\nprint(sum(matrix[0]))" },
+        { "id": "b", "label": "r, c = map(int, input().split())\nmatrix = [input().split() for _ in range(c)]\nprint(sum(matrix[0]))" },
+        { "id": "c", "label": "r = int(input())\nc = int(input())\nmatrix = list(map(int, input().split()))\nprint(sum(matrix[0]))" },
+        { "id": "d", "label": "matrix = [[0] * c for _ in range(r)]\nprint(sum(matrix[0]))" }
       ],
-      "correctChoiceIds": ["a", "b", "c"],
-      "explanation": "Good Java problem solving starts by decoding the input contract. Once you know the tokens, their types, and the per-case shape, the parsing code becomes mechanical.",
-      "studyNote": "Input decoding checklist\n\nAsk first:\n1. Is there a test-case count?\n2. What does one case contain?\n3. Which tokens are ints / longs / strings?\n4. Do I need scalar variables, an array, or a matrix?\n5. Which line should be tokenized next?",
+      "correctChoiceIds": ["a"],
+      "explanation": "A matrix input pattern is just a repeated row parser: read the dimensions, then read `r` lines, turning each one into a list of ints.",
+      "studyNote": "Matrix input template\n\nr, c = map(int, input().split())\nmatrix = [list(map(int, input().split())) for _ in range(r)]",
       "estimatedSeconds": 35
     },
     {
-      "id": "algo-s001",
-      "code": "algo-s001",
+      "id": "algo-p001",
+      "code": "algo-p001",
       "unitId": "algorithms",
-      "chapterId": "numbers",
-      "prompt": "What is the right way to complete this leap-year style problem in Java?",
-      "codeSnippet": "boolean isLeapYear(int year) {\n    // choose the right structure here\n}",
+      "chapterId": "pattern-printing",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`. Print a left triangle of `*` with `n` rows.",
+      "inputFormat": "A single integer `n`.",
+      "outputFormat": "Print `n` lines. Line `i` contains exactly `i` stars.",
+      "exampleInput": "4",
+      "exampleOutput": "*\n**\n***\n****",
       "type": "single",
       "choices": [
-        { "id": "a", "label": "A direct if / else-if / else chain that encodes the stated rules" },
-        { "id": "b", "label": "A nested loop because every decision problem needs iteration" },
-        { "id": "c", "label": "A recursive method because it looks more advanced" },
-        { "id": "d", "label": "A HashMap because rule checks should be data-driven by default" }
+        { "id": "a", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(\"*\" * i)" },
+        { "id": "b", "label": "n = int(input())\nfor i in range(n):\n    print(\"*\" * n)" },
+        { "id": "c", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(\"*\" * (n - i))" },
+        { "id": "d", "label": "n = int(input())\nprint(\"*\" * n)" }
       ],
       "correctChoiceIds": ["a"],
-      "explanation": "For rule-based problems like leap year, the right move is usually a direct conditional chain that mirrors the stated logic instead of forcing in loops or more advanced structures.",
-      "studyNote": "Canonical Java number-decision template\n\nboolean isLeapYear(int year) {\n    if (year % 400 == 0) {\n        return true;\n    } else if (year % 100 == 0) {\n        return false;\n    } else {\n        return year % 4 == 0;\n    }\n}\n\nNumber problems to master from memory:\n- even / odd\n- leap year\n- prime number\n- palindrome number\n- factorial\n- Fibonacci\n- sum of digits\n- reverse digits\n- GCD / LCM\n- factors / divisors",
+      "explanation": "A left triangle grows one symbol per row, so the row number itself controls how many stars to print.",
+      "firstPrinciples": [
+        "Pattern printing is usually row-by-row construction.",
+        "Ask what changes from one row to the next. Here, the star count increases by 1 each row."
+      ],
+      "tips": [
+        "For simple patterns, `print(\"*\" * count)` is cleaner than an inner loop.",
+        "Map each row number directly to the quantity you need to print."
+      ],
+      "studyNote": "Left triangle template\n\nn = int(input())\nfor i in range(1, n + 1):\n    print(\"*\" * i)",
+      "estimatedSeconds": 30
+    },
+    {
+      "id": "algo-p002",
+      "code": "algo-p002",
+      "unitId": "algorithms",
+      "chapterId": "pattern-printing",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`. Print a right triangle of `*` with `n` rows.",
+      "inputFormat": "A single integer `n`.",
+      "outputFormat": "Print `n` lines. The last line contains `n` stars, and earlier lines are padded on the left with spaces.",
+      "exampleInput": "4",
+      "exampleOutput": "   *\n  **\n ***\n****",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(\" \" * (n - i) + \"*\" * i)" },
+        { "id": "b", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(\"*\" * i + \" \" * (n - i))" },
+        { "id": "c", "label": "n = int(input())\nfor i in range(n):\n    print(\" \" * i + \"*\" * i)" },
+        { "id": "d", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(\"*\" * n)" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "A right triangle needs two parts per row: leading spaces, then stars.",
+      "firstPrinciples": [
+        "Many patterns are just combinations of blocks: spaces + symbols.",
+        "If alignment matters, calculate both the padding and the visible content for each row."
+      ],
+      "tips": [
+        "Think in terms of `spaces = n - i` and `stars = i`.",
+        "Right-aligned patterns are usually the first place where spaces become part of the output."
+      ],
+      "studyNote": "Right triangle template\n\nn = int(input())\nfor i in range(1, n + 1):\n    print(\" \" * (n - i) + \"*\" * i)",
       "estimatedSeconds": 35
+    },
+    {
+      "id": "algo-p003",
+      "code": "algo-p003",
+      "unitId": "algorithms",
+      "chapterId": "pattern-printing",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`. Print a centered pyramid of `*` with `n` rows.",
+      "inputFormat": "A single integer `n`.",
+      "outputFormat": "Print `n` lines. Row `i` contains `2*i - 1` stars centered with spaces.",
+      "exampleInput": "4",
+      "exampleOutput": "   *\n  ***\n *****\n*******",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(\" \" * (n - i) + \"*\" * (2 * i - 1))" },
+        { "id": "b", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(\" \" * i + \"*\" * (2 * i - 1))" },
+        { "id": "c", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(\"*\" * i)" },
+        { "id": "d", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(\" \" * (n - i) + \"*\" * (2 * i))" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "A centered pyramid grows by odd counts: 1, 3, 5, 7. That is why the star formula is `2*i - 1`.",
+      "firstPrinciples": [
+        "Centered patterns usually have symmetric widths, which often means odd-number sequences.",
+        "Figure out two formulas per row: left padding and visible width."
+      ],
+      "tips": [
+        "For pyramids, memorize `stars = 2 * i - 1`.",
+        "Once you know padding and width, the whole pattern becomes mechanical."
+      ],
+      "studyNote": "Pyramid template\n\nn = int(input())\nfor i in range(1, n + 1):\n    print(\" \" * (n - i) + \"*\" * (2 * i - 1))",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "algo-p004",
+      "code": "algo-p004",
+      "unitId": "algorithms",
+      "chapterId": "pattern-printing",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`. Print an inverted centered pyramid of `*` with `n` rows.",
+      "inputFormat": "A single integer `n`.",
+      "outputFormat": "Print `n` lines. The first row contains `2*n - 1` stars and each next row shrinks symmetrically.",
+      "exampleInput": "4",
+      "exampleOutput": "*******\n *****\n  ***\n   *",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "n = int(input())\nfor i in range(n, 0, -1):\n    print(\" \" * (n - i) + \"*\" * (2 * i - 1))" },
+        { "id": "b", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(\" \" * (n - i) + \"*\" * (2 * i - 1))" },
+        { "id": "c", "label": "n = int(input())\nfor i in range(n, 0, -1):\n    print(\"*\" * i)" },
+        { "id": "d", "label": "n = int(input())\nfor i in range(n, 0, -1):\n    print(\" \" * i + \"*\" * (2 * i - 1))" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "An inverted pyramid is the same row formula as a normal pyramid, but the row index shrinks instead of growing.",
+      "firstPrinciples": [
+        "Most inverted patterns are just the original pattern with the loop direction reversed.",
+        "If you already know the non-inverted formula, try reusing it with a descending loop first."
+      ],
+      "tips": [
+        "Before inventing a new formula, ask whether you can reverse the existing one.",
+        "Descending loops like `range(n, 0, -1)` are common in shrinking patterns."
+      ],
+      "studyNote": "Inverted pyramid template\n\nn = int(input())\nfor i in range(n, 0, -1):\n    print(\" \" * (n - i) + \"*\" * (2 * i - 1))",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "algo-p005",
+      "code": "algo-p005",
+      "unitId": "algorithms",
+      "chapterId": "pattern-printing",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`. Print a diamond of `*` using a pyramid on top and an inverted pyramid below.",
+      "inputFormat": "A single integer `n`.",
+      "outputFormat": "Print `2*n - 1` lines that form a symmetric diamond.",
+      "exampleInput": "3",
+      "exampleOutput": "  *\n ***\n*****\n ***\n  *",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(\" \" * (n - i) + \"*\" * (2 * i - 1))\nfor i in range(n - 1, 0, -1):\n    print(\" \" * (n - i) + \"*\" * (2 * i - 1))" },
+        { "id": "b", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(\"*\" * i)\nfor i in range(n, 0, -1):\n    print(\"*\" * i)" },
+        { "id": "c", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(\" \" * (n - i) + \"*\" * (2 * i - 1))\nfor i in range(n, 0, -1):\n    print(\" \" * (n - i) + \"*\" * (2 * i - 1))" },
+        { "id": "d", "label": "n = int(input())\nprint(\"*\" * (2 * n - 1))" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "A diamond is just two known patterns stitched together. The only subtlety is avoiding printing the middle row twice.",
+      "firstPrinciples": [
+        "Bigger patterns are often compositions of smaller patterns you already know.",
+        "When combining top and bottom halves, watch for overlap rows that can accidentally print twice."
+      ],
+      "tips": [
+        "Build complex patterns from reusable pieces instead of starting from scratch.",
+        "The second loop usually starts at `n - 1`, not `n`, to avoid duplicating the center."
+      ],
+      "studyNote": "Diamond template\n\nn = int(input())\nfor i in range(1, n + 1):\n    print(\" \" * (n - i) + \"*\" * (2 * i - 1))\nfor i in range(n - 1, 0, -1):\n    print(\" \" * (n - i) + \"*\" * (2 * i - 1))",
+      "estimatedSeconds": 40
+    },
+    {
+      "id": "algo-p006",
+      "code": "algo-p006",
+      "unitId": "algorithms",
+      "chapterId": "pattern-printing",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`. Print Floyd's triangle using numbers starting at 1.",
+      "inputFormat": "A single integer `n`.",
+      "outputFormat": "Print `n` rows. Row `i` contains `i` consecutive numbers.",
+      "exampleInput": "4",
+      "exampleOutput": "1\n2 3\n4 5 6\n7 8 9 10",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "n = int(input())\ncurrent = 1\nfor i in range(1, n + 1):\n    row = []\n    for _ in range(i):\n        row.append(str(current))\n        current += 1\n    print(\" \".join(row))" },
+        { "id": "b", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(\" \".join(str(i) for _ in range(i)))" },
+        { "id": "c", "label": "n = int(input())\ncurrent = 1\nfor i in range(1, n + 1):\n    print(current)\n    current += i" },
+        { "id": "d", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(i)" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "Floyd's triangle needs a running counter that continues across rows, so you must keep state outside the inner loop.",
+      "firstPrinciples": [
+        "Some patterns are not purely about row and column positions; they also need persistent state across rows.",
+        "If values continue from one row to the next, your counter must live outside the row loop."
+      ],
+      "tips": [
+        "Use a `current` variable when the printed value does not reset each row.",
+        "Pattern printing is often either formula-per-cell or stateful generation. Decide which one you have early."
+      ],
+      "studyNote": "Floyd's triangle template\n\nn = int(input())\ncurrent = 1\nfor i in range(1, n + 1):\n    row = []\n    for _ in range(i):\n        row.append(str(current))\n        current += 1\n    print(\" \".join(row))",
+      "estimatedSeconds": 40
+    },
+    {
+      "id": "algo-p007",
+      "code": "algo-p007",
+      "unitId": "algorithms",
+      "chapterId": "pattern-printing",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`. Print a number triangle where row `i` contains the number `i`, repeated `i` times.",
+      "inputFormat": "A single integer `n`.",
+      "outputFormat": "Print `n` rows.",
+      "exampleInput": "4",
+      "exampleOutput": "1\n2 2\n3 3 3\n4 4 4 4",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(\" \".join(str(i) for _ in range(i)))" },
+        { "id": "b", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(\" \".join(str(_) for _ in range(i)))" },
+        { "id": "c", "label": "n = int(input())\nfor i in range(1, n + 1):\n    print(i * i)" },
+        { "id": "d", "label": "n = int(input())\nprint(\"1\")" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "This pattern resets each row and uses the row number as the printed value.",
+      "firstPrinciples": [
+        "Many number/character triangles are row-driven patterns: the row number determines both count and value.",
+        "If every item in a row is the same, build the whole row from that row's identity."
+      ],
+      "tips": [
+        "When a row repeats one value, `join` over a generator is often the cleanest output pattern.",
+        "Separate `what value to print` from `how many times to print it`."
+      ],
+      "studyNote": "Number triangle template\n\nn = int(input())\nfor i in range(1, n + 1):\n    print(\" \".join(str(i) for _ in range(i)))",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "algo-p008",
+      "code": "algo-p008",
+      "unitId": "algorithms",
+      "chapterId": "pattern-printing",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`. Print a character triangle starting from `A`, where row `i` contains the same character repeated `i` times.",
+      "inputFormat": "A single integer `n`.",
+      "outputFormat": "Print `n` rows: `A`, `B B`, `C C C`, and so on.",
+      "exampleInput": "3",
+      "exampleOutput": "A\nB B\nC C C",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "n = int(input())\nfor i in range(n):\n    ch = chr(ord('A') + i)\n    print(\" \".join(ch for _ in range(i + 1)))" },
+        { "id": "b", "label": "n = int(input())\nfor i in range(n):\n    print(chr(ord('A') + i))" },
+        { "id": "c", "label": "n = int(input())\nfor i in range(n):\n    ch = chr(ord('A') + i)\n    print(ch * i)" },
+        { "id": "d", "label": "n = int(input())\nfor i in range(n):\n    print(\"A\")" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "Character patterns often combine row-based counting with ASCII/Unicode stepping using `ord` and `chr`.",
+      "firstPrinciples": [
+        "Character patterns are usually number patterns plus a mapping from row index to character.",
+        "In Python, `ord` and `chr` let you move from letters to numeric positions and back."
+      ],
+      "tips": [
+        "Think `row index -> letter`, then print that letter the needed number of times.",
+        "If spacing matters, use `' '.join(...)` instead of raw string multiplication."
+      ],
+      "studyNote": "Character triangle template\n\nn = int(input())\nfor i in range(n):\n    ch = chr(ord('A') + i)\n    print(\" \".join(ch for _ in range(i + 1)))",
+      "estimatedSeconds": 40
+    },
+    {
+      "id": "algo-p009",
+      "code": "algo-p009",
+      "unitId": "algorithms",
+      "chapterId": "pattern-printing",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`. Print a hollow square of `*`, where only the border contains stars.",
+      "inputFormat": "A single integer `n`.",
+      "outputFormat": "Print `n` rows and `n` columns.",
+      "exampleInput": "4",
+      "exampleOutput": "****\n*  *\n*  *\n****",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "n = int(input())\nfor i in range(n):\n    if i == 0 or i == n - 1:\n        print(\"*\" * n)\n    else:\n        print(\"*\" + \" \" * (n - 2) + \"*\")" },
+        { "id": "b", "label": "n = int(input())\nfor i in range(n):\n    print(\"*\" * n)" },
+        { "id": "c", "label": "n = int(input())\nfor i in range(n):\n    if i == 0 or i == n - 1:\n        print(\"*\" * n)\n    else:\n        print(\" \" * n)" },
+        { "id": "d", "label": "n = int(input())\nprint(\"*\" * n)" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "Hollow patterns depend on border conditions: top row, bottom row, left edge, and right edge.",
+      "firstPrinciples": [
+        "Hollow shapes are border-detection problems.",
+        "Ask whether the current cell is on the boundary or inside the shape. Boundaries get symbols; the interior gets spaces."
+      ],
+      "tips": [
+        "For square/rectangle borders, first handle the full top and bottom rows, then the middle rows.",
+        "If you understand the hollow square, hollow pyramids are the same idea with different boundary math."
+      ],
+      "studyNote": "Hollow square template\n\nn = int(input())\nfor i in range(n):\n    if i == 0 or i == n - 1:\n        print(\"*\" * n)\n    else:\n        print(\"*\" + \" \" * (n - 2) + \"*\")",
+      "estimatedSeconds": 40
+    },
+    {
+      "id": "algo-n001",
+      "code": "algo-n001",
+      "unitId": "algorithms",
+      "chapterId": "numbers",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`. Print `Even` if `n` is even, otherwise print `Odd`.",
+      "inputFormat": "A single integer `n`.",
+      "outputFormat": "Print `Even` or `Odd`.",
+      "exampleInput": "7",
+      "exampleOutput": "Odd",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "n = int(input())\nif n % 2 == 0:\n    print(\"Even\")\nelse:\n    print(\"Odd\")" },
+        { "id": "b", "label": "n = int(input())\nif n / 2 == 0:\n    print(\"Even\")\nelse:\n    print(\"Odd\")" },
+        { "id": "c", "label": "n = int(input())\nif n % 2 == 1:\n    print(\"Even\")\nelse:\n    print(\"Odd\")" },
+        { "id": "d", "label": "n = input()\nprint(\"Even\")" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "Parity is the most basic number check: use `n % 2 == 0` for even, otherwise odd.",
+      "firstPrinciples": [
+        "Even/odd problems are remainder problems. `% 2` tells you whether a number leaves a remainder when split into pairs.",
+        "A lot of beginner number questions reduce to classification: compute a small property, then branch with `if/else`."
+      ],
+      "tips": [
+        "Memorize `n % 2 == 0` as the default even check.",
+        "If the problem only asks for a label like `Even` or `Odd`, do not overcomplicate it with loops or extra variables."
+      ],
+      "studyNote": "Even / odd template\n\nn = int(input())\nif n % 2 == 0:\n    print(\"Even\")\nelse:\n    print(\"Odd\")",
+      "estimatedSeconds": 30
+    },
+    {
+      "id": "algo-n002",
+      "code": "algo-n002",
+      "unitId": "algorithms",
+      "chapterId": "numbers",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read a year and print `Leap Year` if it is a leap year, otherwise print `Not Leap Year`.",
+      "inputFormat": "A single integer `year`.",
+      "outputFormat": "Print `Leap Year` or `Not Leap Year`.",
+      "exampleInput": "2000",
+      "exampleOutput": "Leap Year",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "year = int(input())\nif year % 400 == 0:\n    print(\"Leap Year\")\nelif year % 100 == 0:\n    print(\"Not Leap Year\")\nelif year % 4 == 0:\n    print(\"Leap Year\")\nelse:\n    print(\"Not Leap Year\")" },
+        { "id": "b", "label": "year = int(input())\nif year % 4 == 0:\n    print(\"Leap Year\")\nelse:\n    print(\"Not Leap Year\")" },
+        { "id": "c", "label": "year = int(input())\nif year % 100 == 0 and year % 400 == 0:\n    print(\"Leap Year\")\nelse:\n    print(\"Not Leap Year\")" },
+        { "id": "d", "label": "year = int(input())\nprint(\"Leap Year\")" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "The leap-year rule is ordered: divisible by 400 means leap year, divisible by 100 means not leap year, otherwise divisible by 4 means leap year.",
+      "firstPrinciples": [
+        "Some rule-based problems are about precedence, not just conditions. The order of checks matters because later rules can be overridden by earlier special cases.",
+        "When a statement has exceptions to exceptions, write the conditions in the same order the English rule describes them."
+      ],
+      "tips": [
+        "Think of leap year as a decision tree: 400 first, then 100, then 4.",
+        "If a problem statement has words like `except` or `unless`, expect ordered `if / elif / else` logic."
+      ],
+      "studyNote": "Leap year template\n\nyear = int(input())\nif year % 400 == 0:\n    print(\"Leap Year\")\nelif year % 100 == 0:\n    print(\"Not Leap Year\")\nelif year % 4 == 0:\n    print(\"Leap Year\")\nelse:\n    print(\"Not Leap Year\")",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "algo-n003",
+      "code": "algo-n003",
+      "unitId": "algorithms",
+      "chapterId": "numbers",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`. Print `Prime` if `n` is prime, otherwise print `Not Prime`.",
+      "inputFormat": "A single integer `n`.",
+      "outputFormat": "Print `Prime` or `Not Prime`.",
+      "exampleInput": "13",
+      "exampleOutput": "Prime",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "n = int(input())\nif n < 2:\n    print(\"Not Prime\")\nelse:\n    is_prime = True\n    for i in range(2, int(n ** 0.5) + 1):\n        if n % i == 0:\n            is_prime = False\n            break\n    print(\"Prime\" if is_prime else \"Not Prime\")" },
+        { "id": "b", "label": "n = int(input())\nif n < 2:\n    print(\"Not Prime\")\nelse:\n    is_prime = True\n    for i in range(2, int(n ** 0.5)):\n        if n % i == 0:\n            is_prime = False\n            break\n    print(\"Prime\" if is_prime else \"Not Prime\")" },
+        { "id": "c", "label": "n = int(input())\nif n == 1:\n    print(\"Not Prime\")\nelse:\n    is_prime = True\n    for i in range(2, n):\n        if n % i == 0:\n            is_prime = False\n            break\n    print(\"Prime\" if is_prime else \"Not Prime\")" },
+        { "id": "d", "label": "n = int(input())\nis_prime = True\nfor i in range(2, int(n ** 0.5) + 1):\n    if n % i == 0:\n        is_prime = False\n        break\nprint(\"Prime\" if is_prime else \"Not Prime\")" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "A correct prime check handles `n < 2` and tests divisors only up to `sqrt(n)`. Common bugs are using `range(2, int(sqrt(n)))` and missing perfect-square divisors, or forgetting that `0` and `1` are not prime.",
+      "firstPrinciples": [
+        "A number is prime if it has no divisor other than 1 and itself.",
+        "Divisors come in pairs. If `i` divides `n`, then `n / i` also divides `n`, so you only need to search up to `sqrt(n)`.",
+        "Edge cases matter: `0` and `1` are not prime because prime numbers must have exactly two positive divisors."
+      ],
+      "tips": [
+        "Memorize the pattern `for i in range(2, int(n ** 0.5) + 1)`.",
+        "When testing divisor-based properties, ask yourself whether you can stop early instead of scanning all the way to `n`.",
+        "Perfect squares are the classic off-by-one trap, which is why the `+ 1` matters."
+      ],
+      "studyNote": "Prime template\n\nn = int(input())\nif n < 2:\n    print(\"Not Prime\")\nelse:\n    is_prime = True\n    for i in range(2, int(n ** 0.5) + 1):\n        if n % i == 0:\n            is_prime = False\n            break\n    print(\"Prime\" if is_prime else \"Not Prime\")",
+      "estimatedSeconds": 40
+    },
+    {
+      "id": "algo-n004",
+      "code": "algo-n004",
+      "unitId": "algorithms",
+      "chapterId": "numbers",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`. Print `Palindrome` if its digits read the same forward and backward, otherwise print `Not Palindrome`.",
+      "inputFormat": "A single non-negative integer `n`.",
+      "outputFormat": "Print `Palindrome` or `Not Palindrome`.",
+      "exampleInput": "121",
+      "exampleOutput": "Palindrome",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "n = int(input())\noriginal = n\nrev = 0\nwhile n > 0:\n    rev = rev * 10 + n % 10\n    n //= 10\nprint(\"Palindrome\" if original == rev else \"Not Palindrome\")" },
+        { "id": "b", "label": "n = int(input())\nprint(\"Palindrome\" if n == str(n)[::-1] else \"Not Palindrome\")" },
+        { "id": "c", "label": "n = int(input())\nrev = 0\nwhile n > 0:\n    rev += n % 10\n    n //= 10\nprint(\"Palindrome\" if rev == n else \"Not Palindrome\")" },
+        { "id": "d", "label": "n = int(input())\nprint(\"Palindrome\")" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "For number-palindrome problems, the standard integer approach is to reverse the digits and compare to the original value.",
+      "firstPrinciples": [
+        "Palindrome checks are symmetry checks: the value should look the same from left to right and right to left.",
+        "For integer-digit problems, `% 10` extracts the last digit and `//= 10` removes it. That is the core move behind many number manipulations."
+      ],
+      "tips": [
+        "If the problem is explicitly about a number, practicing the numeric approach is better than jumping straight to string conversion.",
+        "Reversing and comparing to the original works for both palindrome numbers and reverse-digit problems."
+      ],
+      "studyNote": "Palindrome number template\n\nn = int(input())\noriginal = n\nrev = 0\nwhile n > 0:\n    rev = rev * 10 + n % 10\n    n //= 10\nprint(\"Palindrome\" if original == rev else \"Not Palindrome\")",
+      "estimatedSeconds": 40
+    },
+    {
+      "id": "algo-n005",
+      "code": "algo-n005",
+      "unitId": "algorithms",
+      "chapterId": "numbers",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`. Print `n!`.",
+      "inputFormat": "A single non-negative integer `n`.",
+      "outputFormat": "Print the factorial of `n`.",
+      "exampleInput": "5",
+      "exampleOutput": "120",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "n = int(input())\nfact = 1\nfor i in range(1, n + 1):\n    fact *= i\nprint(fact)" },
+        { "id": "b", "label": "n = int(input())\nfact = 0\nfor i in range(1, n + 1):\n    fact *= i\nprint(fact)" },
+        { "id": "c", "label": "n = int(input())\nfact = 1\nfor i in range(n):\n    fact += i\nprint(fact)" },
+        { "id": "d", "label": "n = int(input())\nprint(n)" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "Factorial is repeated multiplication, so start from `1` and multiply by each number from `1` to `n`.",
+      "firstPrinciples": [
+        "Factorial is an accumulation problem. You keep a running answer and update it each step.",
+        "Multiplicative accumulations must start from the multiplicative identity, which is `1`, not `0`."
+      ],
+      "tips": [
+        "When a problem says `product`, `factorial`, or repeated multiplication, think `ans = 1` and loop.",
+        "The additive identity is `0`; the multiplicative identity is `1`. Mixing those up breaks many beginner problems."
+      ],
+      "studyNote": "Factorial template\n\nn = int(input())\nfact = 1\nfor i in range(1, n + 1):\n    fact *= i\nprint(fact)",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "algo-n006",
+      "code": "algo-n006",
+      "unitId": "algorithms",
+      "chapterId": "numbers",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`. Print the `n`th Fibonacci number assuming `F(0) = 0` and `F(1) = 1`.",
+      "inputFormat": "A single non-negative integer `n`.",
+      "outputFormat": "Print the `n`th Fibonacci number.",
+      "exampleInput": "7",
+      "exampleOutput": "13",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "n = int(input())\na, b = 0, 1\nfor _ in range(n):\n    a, b = b, a + b\nprint(a)" },
+        { "id": "b", "label": "n = int(input())\na, b = 0, 1\nfor _ in range(n):\n    a = b\n    b = a + b\nprint(a)" },
+        { "id": "c", "label": "n = int(input())\na, b = 0, 1\nfor _ in range(n - 1):\n    a, b = b, a + b\nprint(b)" },
+        { "id": "d", "label": "n = int(input())\na, b = 1, 1\nfor _ in range(n):\n    a, b = b, a + b\nprint(a)" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "The standard iterative Fibonacci template updates two running values and prints `a` after `n` transitions. Common mistakes are overwriting `a` before computing the new `b`, getting the loop count off by one, or starting from the wrong base values.",
+      "firstPrinciples": [
+        "Fibonacci is a state-transition problem. At each step, the next state depends on the previous two values.",
+        "When two variables both depend on the old state, update them together so you do not lose information."
+      ],
+      "tips": [
+        "Tuple assignment like `a, b = b, a + b` is the cleanest Python pattern for simultaneous updates.",
+        "For recurrence problems, ask: what state do I need to carry from one iteration to the next?",
+        "Always anchor your loop logic against small cases like `n = 0`, `1`, and `2`."
+      ],
+      "studyNote": "Fibonacci template\n\nn = int(input())\na, b = 0, 1\nfor _ in range(n):\n    a, b = b, a + b\nprint(a)",
+      "estimatedSeconds": 40
+    },
+    {
+      "id": "algo-n007",
+      "code": "algo-n007",
+      "unitId": "algorithms",
+      "chapterId": "numbers",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`. Print the sum of its digits.",
+      "inputFormat": "A single non-negative integer `n`.",
+      "outputFormat": "Print the sum of the digits of `n`.",
+      "exampleInput": "482",
+      "exampleOutput": "14",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "n = int(input())\ntotal = 0\nwhile n > 0:\n    total += n % 10\n    n //= 10\nprint(total)" },
+        { "id": "b", "label": "n = int(input())\ntotal = 1\nwhile n > 0:\n    total *= n % 10\n    n //= 10\nprint(total)" },
+        { "id": "c", "label": "n = int(input())\nprint(n % 10)" },
+        { "id": "d", "label": "n = int(input())\nprint(n)" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "Digit-sum problems use `% 10` to grab the last digit and `//= 10` to remove it.",
+      "firstPrinciples": [
+        "This is a digit-decomposition problem: repeatedly peel off the last digit until the number is exhausted.",
+        "Many number problems are just loops that consume digits one at a time."
+      ],
+      "tips": [
+        "Use `% 10` when you need the current last digit and `//= 10` when you want to move to the next one.",
+        "When the question asks for a sum, initialize with `0`; when it asks for a product, initialize with `1`."
+      ],
+      "studyNote": "Sum of digits template\n\nn = int(input())\ntotal = 0\nwhile n > 0:\n    total += n % 10\n    n //= 10\nprint(total)",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "algo-n008",
+      "code": "algo-n008",
+      "unitId": "algorithms",
+      "chapterId": "numbers",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`. Print the number formed by reversing its digits.",
+      "inputFormat": "A single non-negative integer `n`.",
+      "outputFormat": "Print the reversed-digit number.",
+      "exampleInput": "5301",
+      "exampleOutput": "1035",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "n = int(input())\nrev = 0\nwhile n > 0:\n    rev = rev * 10 + n % 10\n    n //= 10\nprint(rev)" },
+        { "id": "b", "label": "n = int(input())\nrev = 0\nwhile n > 0:\n    rev += n % 10\n    n //= 10\nprint(rev)" },
+        { "id": "c", "label": "n = int(input())\nprint(n % 10)" },
+        { "id": "d", "label": "n = int(input())\nprint(n)" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "To reverse digits numerically, multiply the current answer by 10, then add the last digit each step.",
+      "firstPrinciples": [
+        "Reversing digits is a place-value problem. Each old digit becomes a new digit in a shifted position.",
+        "Building a number from left to right usually means `ans = ans * 10 + new_digit`."
+      ],
+      "tips": [
+        "The pattern `rev = rev * 10 + n % 10` shows up constantly in digit-manipulation problems.",
+        "If you understand reverse digits, you already understand half of palindrome-number logic."
+      ],
+      "studyNote": "Reverse digits template\n\nn = int(input())\nrev = 0\nwhile n > 0:\n    rev = rev * 10 + n % 10\n    n //= 10\nprint(rev)",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "algo-n009",
+      "code": "algo-n009",
+      "unitId": "algorithms",
+      "chapterId": "numbers",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read two integers `a` and `b`. Print their GCD and LCM separated by a space.",
+      "inputFormat": "A single line containing two space-separated integers `a` and `b`.",
+      "outputFormat": "Print `gcd lcm`.",
+      "exampleInput": "12 18",
+      "exampleOutput": "6 36",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "a, b = map(int, input().split())\nx, y = a, b\nwhile y != 0:\n    x, y = y, x % y\ngcd = x\nlcm = a * b // gcd\nprint(gcd, lcm)" },
+        { "id": "b", "label": "a, b = map(int, input().split())\ngcd = a + b\nlcm = a * b\nprint(gcd, lcm)" },
+        { "id": "c", "label": "a, b = map(int, input().split())\ngcd = min(a, b)\nlcm = max(a, b)\nprint(gcd, lcm)" },
+        { "id": "d", "label": "a, b = map(int, input().split())\nprint(a, b)" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "Use Euclid's algorithm for GCD, then compute LCM with `a * b // gcd`.",
+      "firstPrinciples": [
+        "GCD is about shared divisibility; LCM is about the smallest shared multiple.",
+        "Euclid's algorithm works because `gcd(a, b)` is the same as `gcd(b, a % b)` until the remainder becomes zero.",
+        "Once you know the GCD, the identity `gcd * lcm = a * b` gives you the LCM."
+      ],
+      "tips": [
+        "Memorize the Euclid loop exactly once and reuse it everywhere.",
+        "If a problem asks for both GCD and LCM, compute GCD first; do not try to brute-force LCM."
+      ],
+      "studyNote": "GCD / LCM template\n\na, b = map(int, input().split())\nx, y = a, b\nwhile y != 0:\n    x, y = y, x % y\ngcd = x\nlcm = a * b // gcd\nprint(gcd, lcm)",
+      "estimatedSeconds": 45
+    },
+    {
+      "id": "algo-n010",
+      "code": "algo-n010",
+      "unitId": "algorithms",
+      "chapterId": "numbers",
+      "prompt": "Which Python code solves this problem correctly?",
+      "problemDescription": "Read an integer `n`. Print all of its positive divisors in increasing order, separated by spaces.",
+      "inputFormat": "A single positive integer `n`.",
+      "outputFormat": "Print all positive divisors of `n` in increasing order.",
+      "exampleInput": "12",
+      "exampleOutput": "1 2 3 4 6 12",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "n = int(input())\nans = []\nfor i in range(1, n + 1):\n    if n % i == 0:\n        ans.append(str(i))\nprint(\" \".join(ans))" },
+        { "id": "b", "label": "n = int(input())\nans = []\nfor i in range(1, n):\n    if n % i == 0:\n        ans.append(str(i))\nprint(\" \".join(ans))" },
+        { "id": "c", "label": "n = int(input())\nans = []\nfor i in range(1, n + 1):\n    if i % n == 0:\n        ans.append(str(i))\nprint(\" \".join(ans))" },
+        { "id": "d", "label": "n = int(input())\nans = []\nfor i in range(2, n + 1):\n    if n % i == 0:\n        ans.append(str(i))\nprint(\" \".join(ans))" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "The simplest divisor template scans from `1` to `n` and keeps numbers that divide `n` evenly. Real mistakes here are skipping `n` with `range(1, n)`, flipping the modulus to `i % n`, or accidentally omitting `1`.",
+      "firstPrinciples": [
+        "A divisor is a number that leaves remainder `0` when dividing `n`.",
+        "This is a filtering problem: scan candidates, test a condition, keep the ones that pass.",
+        "Many number questions are really candidate-generation plus a divisibility test."
+      ],
+      "tips": [
+        "The safe beginner pattern is `for i in range(1, n + 1): if n % i == 0:`.",
+        "When you forget whether it is `n % i` or `i % n`, read the condition in English: `i divides n` means `n` divided by `i` leaves remainder `0`.",
+        "Once this basic version is comfortable, you can later optimize divisors using paired factors up to `sqrt(n)`."
+      ],
+      "studyNote": "Factors / divisors template\n\nn = int(input())\nans = []\nfor i in range(1, n + 1):\n    if n % i == 0:\n        ans.append(str(i))\nprint(\" \".join(ans))",
+      "estimatedSeconds": 40
     },
     {
       "id": "algo-m002",
       "code": "algo-m002",
       "unitId": "algorithms",
       "chapterId": "string-manipulation",
-      "prompt": "You need to reverse a string and also solve many similar rebuilding tasks. Which Java tools/patterns should be in your base kit?",
-      "codeSnippet": "String reverse(String s) {\n    // fill in the standard Java approach\n}",
-      "type": "multi",
+      "prompt": "Problem: return the reversed version of a string `s`. Which implementation is the strongest simple answer?",
+      "codeSnippet": "def reverse_string(s):\n    # choose one implementation",
+      "type": "single",
       "choices": [
-        { "id": "a", "label": "Know when to use charAt and length safely" },
-        { "id": "b", "label": "Track indices carefully when comparing from both ends" },
-        { "id": "c", "label": "Convert every string problem into recursion first" },
-        { "id": "d", "label": "Use StringBuilder when repeatedly constructing output" }
+        { "id": "a", "label": "return s[::-1]" },
+        { "id": "b", "label": "return reverse(s)" },
+        { "id": "c", "label": "return s.reverse()" },
+        { "id": "d", "label": "return ''.join(sorted(s))" }
       ],
-      "correctChoiceIds": ["a", "b", "d"],
-      "explanation": "String questions are usually about safe indexing, clean comparisons, and not doing expensive string concatenation carelessly in loops.",
-      "studyNote": "Canonical Java palindrome-string template\n\nboolean isPalindrome(String s) {\n    int left = 0;\n    int right = s.length() - 1;\n\n    while (left < right) {\n        if (s.charAt(left) != s.charAt(right)) {\n            return false;\n        }\n        left++;\n        right--;\n    }\n\n    return true;\n}\n\nAlso rehearse:\n- counting vowels\n- reversing a string with StringBuilder\n- checking character frequency with loops",
+      "correctChoiceIds": ["a"],
+      "explanation": "For a direct reverse-string problem, `s[::-1]` is the cleanest Python answer to memorize. It is concise, correct, and widely accepted in interviews unless they explicitly forbid slicing.",
+      "studyNote": "Canonical Python palindrome-string template\n\ndef is_palindrome(s):\n    left = 0\n    right = len(s) - 1\n\n    while left < right:\n        if s[left] != s[right]:\n            return False\n        left += 1\n        right -= 1\n\n    return True\n\nAlso rehearse:\n- counting vowels\n- reversing a string with slicing or ''.join(reversed(s))\n- checking character frequency with Counter",
       "estimatedSeconds": 40
     },
     {
@@ -207,18 +809,18 @@
       "code": "algo-s003",
       "unitId": "algorithms",
       "chapterId": "arithmetic-binary",
-      "prompt": "Which code pattern should you memorize for manual decimal-to-binary conversion in Java?",
-      "codeSnippet": "String toBinary(int n) {\n    // build the binary representation yourself\n}",
+      "prompt": "Problem: convert a non-negative integer `n` to binary yourself, without using `bin(n)`. Which implementation pattern is correct?",
+      "codeSnippet": "def to_binary(n):\n    # build the binary representation yourself",
       "type": "single",
       "choices": [
-        { "id": "a", "label": "Repeatedly divide by 2, append remainder, then reverse" },
-        { "id": "b", "label": "Sort the digits first, then join them" },
-        { "id": "c", "label": "Use nested loops because base conversion needs two dimensions" },
-        { "id": "d", "label": "Convert the number to a char array before doing arithmetic" }
+        { "id": "a", "label": "def to_binary(n):\n    if n == 0:\n        return \"0\"\n    bits = []\n    while n > 0:\n        bits.append(str(n % 2))\n        n //= 2\n    return \"\".join(reversed(bits))" },
+        { "id": "b", "label": "def to_binary(n):\n    bits = []\n    while n > 0:\n        bits.append(str(n // 2))\n        n %= 2\n    return \"\".join(bits)" },
+        { "id": "c", "label": "def to_binary(n):\n    bits = []\n    for _ in range(n):\n        bits.append(str(n % 2))\n    return \"\".join(bits)" },
+        { "id": "d", "label": "def to_binary(n):\n    return str(n / 2)" }
       ],
       "correctChoiceIds": ["a"],
       "explanation": "For manual binary conversion, the standard interview-safe loop is divide by 2, record remainders, then reverse the collected digits.",
-      "studyNote": "Canonical Java decimal-to-binary template\n\nString toBinary(int n) {\n    if (n == 0) {\n        return \"0\";\n    }\n\n    StringBuilder bits = new StringBuilder();\n\n    while (n > 0) {\n        bits.append(n % 2);\n        n /= 2;\n    }\n\n    return bits.reverse().toString();\n}\n\nAlso know:\n- n % 2 checks odd/even\n- n / 10 and n % 10 for digit problems",
+      "studyNote": "Canonical Python decimal-to-binary template\n\ndef to_binary(n):\n    if n == 0:\n        return \"0\"\n\n    bits = []\n    while n > 0:\n        bits.append(str(n % 2))\n        n //= 2\n\n    return \"\".join(reversed(bits))\n\nAlso know:\n- n % 2 checks odd/even\n- n // 10 and n % 10 for digit problems",
       "estimatedSeconds": 35
     },
     {
@@ -226,18 +828,18 @@
       "code": "algo-m004",
       "unitId": "algorithms",
       "chapterId": "arrays",
-      "prompt": "For beginner array problems in Java, which tools and habits are worth memorizing first?",
-      "codeSnippet": "int maxValue(int[] nums) {\n    // write the standard array scan\n}",
-      "type": "multi",
+      "prompt": "Problem: return the maximum value in a non-empty list `nums` without using `max(nums)`. Which implementation is correct?",
+      "codeSnippet": "def max_value(nums):\n    # choose one implementation",
+      "type": "single",
       "choices": [
-        { "id": "a", "label": "Use a for loop or enhanced for loop to scan once" },
-        { "id": "b", "label": "Know Arrays.sort for ordering-based solutions" },
-        { "id": "c", "label": "Convert every array into recursion before scanning" },
-        { "id": "d", "label": "Track running state like min, max, sum, or count" }
+        { "id": "a", "label": "best = nums[0]\nfor num in nums[1:]:\n    if num > best:\n        best = num\nreturn best" },
+        { "id": "b", "label": "best = 0\nfor num in nums:\n    if num > best:\n        best = num\nreturn best" },
+        { "id": "c", "label": "return nums.sort()[-1]" },
+        { "id": "d", "label": "for i in range(len(nums)):\n    best = nums[i]\nreturn best" }
       ],
-      "correctChoiceIds": ["a", "b", "d"],
-      "explanation": "Most beginner array problems are solved with one clean scan, optional sorting via Arrays.sort, and disciplined running-state updates.",
-      "studyNote": "Canonical Java array scan template\n\nint maxValue(int[] nums) {\n    int best = nums[0];\n\n    for (int i = 1; i < nums.length; i++) {\n        if (nums[i] > best) {\n            best = nums[i];\n        }\n    }\n\n    return best;\n}\n\nLibrary habits to memorize:\n- Arrays.sort(nums)\n- Arrays.toString(nums)\n- nums.length\n- enhanced for loops for read-only scans",
+      "correctChoiceIds": ["a"],
+      "explanation": "This is the standard running-maximum scan. Starting with `best = nums[0]` avoids bugs on all-negative lists, and updating in one pass is the core pattern to memorize.",
+      "studyNote": "Canonical Python list scan template\n\ndef max_value(nums):\n    best = nums[0]\n\n    for num in nums[1:]:\n        if num > best:\n            best = num\n\n    return best\n\nLibrary habits to memorize:\n- sorted(nums)\n- nums.sort()\n- len(nums)\n- for num in nums",
       "estimatedSeconds": 40
     }
   ]

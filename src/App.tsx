@@ -101,9 +101,15 @@ function App() {
       return
     }
 
-    setDraftSelection([])
-    setSubmittedAnswer(null)
-  }, [currentQuestion])
+    if (!activeSession) {
+      setDraftSelection([])
+      setSubmittedAnswer(null)
+      return
+    }
+
+    setDraftSelection(activeSession.draftSelectionByQuestionId[currentQuestion.id] ?? [])
+    setSubmittedAnswer(activeSession.submittedAnswerByQuestionId[currentQuestion.id] ?? null)
+  }, [activeSession, currentQuestion])
 
   const preloadDecks = async () => {
     try {
@@ -181,13 +187,41 @@ function App() {
     }
 
     if (currentQuestion.type === 'single') {
-      setDraftSelection([choiceId])
+      const nextSelection = [choiceId]
+      setDraftSelection(nextSelection)
+      setActiveSession((current) =>
+        current && current.questionIds[current.currentIndex] === currentQuestion.id
+          ? {
+              ...current,
+              draftSelectionByQuestionId: {
+                ...current.draftSelectionByQuestionId,
+                [currentQuestion.id]: nextSelection,
+              },
+            }
+          : current,
+      )
       return
     }
 
-    setDraftSelection((current) =>
-      current.includes(choiceId) ? current.filter((item) => item !== choiceId) : [...current, choiceId],
-    )
+    setDraftSelection((current) => {
+      const nextSelection = current.includes(choiceId)
+        ? current.filter((item) => item !== choiceId)
+        : [...current, choiceId]
+
+      setActiveSession((active) =>
+        active && active.questionIds[active.currentIndex] === currentQuestion.id
+          ? {
+              ...active,
+              draftSelectionByQuestionId: {
+                ...active.draftSelectionByQuestionId,
+                [currentQuestion.id]: nextSelection,
+              },
+            }
+          : active,
+      )
+
+      return nextSelection
+    })
   }
 
   const submitCurrent = () => {
@@ -195,81 +229,119 @@ function App() {
       return
     }
 
-    setSubmittedAnswer(
-      gradeQuestion(
-        currentQuestion,
-        draftSelection,
-        activeSession.tracked ? progress.questions[currentQuestion.id] : undefined,
-      ),
+    const graded = gradeQuestion(
+      currentQuestion,
+      draftSelection,
+      activeSession.tracked ? progress.questions[currentQuestion.id] : undefined,
     )
+
+    setSubmittedAnswer(graded)
+    setActiveSession({
+      ...activeSession,
+      draftSelectionByQuestionId: {
+        ...activeSession.draftSelectionByQuestionId,
+        [currentQuestion.id]: draftSelection,
+      },
+      submittedAnswerByQuestionId: {
+        ...activeSession.submittedAnswerByQuestionId,
+        [currentQuestion.id]: graded,
+      },
+    })
   }
 
-  const goNext = () => {
+  const persistCurrentQuestion = (session: Session, question: Question, answer: SessionAnswer | null) => {
+    if (!answer) {
+      return {
+        answers: session.answers,
+        progress,
+      }
+    }
+
+    const elapsedSeconds = Math.max(1, Math.round((Date.now() - session.questionStartedAt) / 1000))
+    const nextRecord = {
+      questionId: question.id,
+      selectedChoiceIds: session.draftSelectionByQuestionId[question.id] ?? draftSelection,
+      isCorrect: answer.isCorrect,
+      elapsedSeconds,
+    }
+    const existingIndex = session.answers.findIndex((item) => item.questionId === question.id)
+    const updatedAnswers =
+      existingIndex >= 0
+        ? session.answers.map((item, index) => (index === existingIndex ? nextRecord : item))
+        : [...session.answers, nextRecord]
+
+    const updatedProgress = session.tracked
+      ? {
+          ...progress,
+          questions: {
+            ...progress.questions,
+            [question.id]: answer.progress,
+          },
+        }
+      : progress
+
+    return {
+      answers: updatedAnswers,
+      progress: updatedProgress,
+    }
+  }
+
+  const navigateQuestion = (direction: -1 | 1) => {
+    if (!activeSession || !currentQuestion) {
+      return
+    }
+
+    const nextIndex = activeSession.currentIndex + direction
+    if (nextIndex < 0 || nextIndex >= activeSession.questionIds.length) {
+      return
+    }
+
+    const persisted = persistCurrentQuestion(activeSession, currentQuestion, submittedAnswer)
+    if (activeSession.tracked && persisted.progress !== progress) {
+      setProgress(persisted.progress)
+    }
+
+    setActiveSession({
+      ...activeSession,
+      answers: persisted.answers,
+      draftSelectionByQuestionId: {
+        ...activeSession.draftSelectionByQuestionId,
+        [currentQuestion.id]: draftSelection,
+      },
+      currentIndex: nextIndex,
+      questionStartedAt: Date.now(),
+    })
+  }
+
+  const finishSession = () => {
     if (!activeSession || !currentQuestion || !submittedAnswer) {
       return
     }
 
     const completedAt = Date.now()
-    const elapsedSeconds = Math.max(
-      1,
-      Math.round((completedAt - activeSession.questionStartedAt) / 1000),
-    )
-
-    const updatedAnswers = [
-      ...activeSession.answers,
-      {
-        questionId: currentQuestion.id,
-        selectedChoiceIds: draftSelection,
-        isCorrect: submittedAnswer.isCorrect,
-        elapsedSeconds,
-      },
-    ]
-
-    const updatedProgress = activeSession.tracked
-      ? {
-          ...progress,
-          questions: {
-            ...progress.questions,
-            [currentQuestion.id]: submittedAnswer.progress,
-          },
-        }
-      : progress
-
-    if (activeSession.currentIndex === activeSession.questionIds.length - 1) {
-      const summary = computeSessionSummary(loadedTrack, updatedAnswers)
-      const record: SessionRecord = {
-        id: uid(),
-        mode:
-          typeof activeSession.mode === 'string'
-            ? activeSession.mode
-            : `deck:${activeSession.mode.unitId}`,
-        completedAt,
-        totalQuestions: updatedAnswers.length,
-        correctAnswers: summary.correctAnswers,
-        accuracy: summary.accuracy,
-      }
-
-      if (activeSession.tracked) {
-        setProgress({
-          ...updatedProgress,
-          sessions: [record, ...updatedProgress.sessions].slice(0, 20),
-        })
-      }
-      setActiveSession(null)
-      setSubmittedAnswer(null)
-      setDraftSelection([])
-      return
+    const persisted = persistCurrentQuestion(activeSession, currentQuestion, submittedAnswer)
+    const summary = computeSessionSummary(loadedTrack, persisted.answers)
+    const record: SessionRecord = {
+      id: uid(),
+      mode:
+        typeof activeSession.mode === 'string'
+          ? activeSession.mode
+          : `deck:${activeSession.mode.unitId}`,
+      completedAt,
+      totalQuestions: persisted.answers.length,
+      correctAnswers: summary.correctAnswers,
+      accuracy: summary.accuracy,
     }
 
     if (activeSession.tracked) {
-      setProgress(updatedProgress)
+      setProgress({
+        ...persisted.progress,
+        sessions: [record, ...persisted.progress.sessions].slice(0, 20),
+      })
     }
-    setActiveSession({
-      ...activeSession,
-      answers: updatedAnswers,
-      currentIndex: activeSession.currentIndex + 1,
-      questionStartedAt: Date.now(),
-    })
+    setActiveSession(null)
+    setSubmittedAnswer(null)
+    setDraftSelection([])
   }
 
   const resetAllProgress = () => {
@@ -522,7 +594,7 @@ function App() {
           </aside>
         </div>
       ) : currentQuestion ? (
-          <PracticeView
+        <PracticeView
           activeSession={activeSession}
           currentQuestion={currentQuestion}
           countdown={Math.max(
@@ -534,7 +606,9 @@ function App() {
           onQuit={abandonSession}
           onSubmit={submitCurrent}
           onToggleChoice={toggleChoice}
-          onNext={goNext}
+          onPrevious={() => navigateQuestion(-1)}
+          onNext={() => navigateQuestion(1)}
+          onFinish={finishSession}
         />
       ) : null}
     </main>
@@ -597,7 +671,9 @@ function PracticeView({
   onQuit,
   onSubmit,
   onToggleChoice,
+  onPrevious,
   onNext,
+  onFinish,
 }: {
   activeSession: Session
   currentQuestion: Question
@@ -607,7 +683,9 @@ function PracticeView({
   onQuit: () => void
   onSubmit: () => void
   onToggleChoice: (choiceId: string) => void
+  onPrevious: () => void
   onNext: () => void
+  onFinish: () => void
 }) {
   const orderedChoices =
     activeSession.choiceOrderByQuestionId[currentQuestion.id]
@@ -652,6 +730,40 @@ function PracticeView({
           <pre className="study-note question-code-block">{currentQuestion.codeSnippet}</pre>
         ) : null}
         <h3>{currentQuestion.prompt}</h3>
+        {currentQuestion.problemDescription ? (
+          <div className="question-brief">
+            <p className="question-brief__label">Problem</p>
+            <p>{currentQuestion.problemDescription}</p>
+          </div>
+        ) : null}
+        {currentQuestion.inputFormat ? (
+          <div className="question-brief">
+            <p className="question-brief__label">Input</p>
+            <pre className="study-note question-brief__block">{currentQuestion.inputFormat}</pre>
+          </div>
+        ) : null}
+        {currentQuestion.outputFormat ? (
+          <div className="question-brief">
+            <p className="question-brief__label">Output</p>
+            <pre className="study-note question-brief__block">{currentQuestion.outputFormat}</pre>
+          </div>
+        ) : null}
+        {currentQuestion.exampleInput || currentQuestion.exampleOutput ? (
+          <div className="question-brief question-brief--split">
+            {currentQuestion.exampleInput ? (
+              <div>
+                <p className="question-brief__label">Example Input</p>
+                <pre className="study-note question-brief__block">{currentQuestion.exampleInput}</pre>
+              </div>
+            ) : null}
+            {currentQuestion.exampleOutput ? (
+              <div>
+                <p className="question-brief__label">Example Output</p>
+                <pre className="study-note question-brief__block">{currentQuestion.exampleOutput}</pre>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
         <p className="helper-copy">
           {currentQuestion.type === 'multi' ? 'Select all that apply' : 'Select one answer'}
         </p>
@@ -677,7 +789,7 @@ function PracticeView({
                 onClick={() => onToggleChoice(choice.id)}
               >
                 <span className="choice-indicator" />
-                <span>{choice.label}</span>
+                <span className="choice-label">{choice.label}</span>
               </button>
             )
           })}
@@ -689,19 +801,70 @@ function PracticeView({
               {submittedAnswer.isCorrect ? 'Correct' : `Grade ${submittedAnswer.grade}/4`}
             </div>
             <p>{currentQuestion.explanation}</p>
+            {currentQuestion.firstPrinciples?.length ? (
+              <div className="learning-block">
+                <p className="question-brief__label">First Principles</p>
+                <ul className="learning-list">
+                  {currentQuestion.firstPrinciples.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+            {currentQuestion.tips?.length ? (
+              <div className="learning-block">
+                <p className="question-brief__label">Tips</p>
+                <ul className="learning-list">
+                  {currentQuestion.tips.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
             {currentQuestion.studyNote ? (
               <pre className="study-note">{currentQuestion.studyNote}</pre>
             ) : null}
-            <button className="primary-button" onClick={onNext}>
-              {activeSession.currentIndex === activeSession.questionIds.length - 1
-                ? 'Finish session'
-                : 'Next question'}
-            </button>
+            <div className="practice-nav">
+              <button
+                className="action-card action-card--ghost"
+                disabled={activeSession.currentIndex === 0}
+                onClick={onPrevious}
+              >
+                Previous problem
+              </button>
+              {activeSession.currentIndex === activeSession.questionIds.length - 1 ? (
+                <button className="primary-button" onClick={onFinish}>
+                  Finish session
+                </button>
+              ) : (
+                <button className="primary-button" onClick={onNext}>
+                  Next problem
+                </button>
+              )}
+            </div>
           </div>
         ) : (
-          <button className="primary-button" disabled={draftSelection.length === 0} onClick={onSubmit}>
-            Submit selection
-          </button>
+          <div className="practice-nav">
+            <button
+              className="action-card action-card--ghost"
+              disabled={activeSession.currentIndex === 0}
+              onClick={onPrevious}
+            >
+              Previous problem
+            </button>
+            <div className="practice-nav__actions">
+              <button
+                className="action-card action-card--ghost"
+                disabled={activeSession.currentIndex === activeSession.questionIds.length - 1}
+                onClick={onNext}
+              >
+                Next problem
+              </button>
+              <button className="primary-button" disabled={draftSelection.length === 0} onClick={onSubmit}>
+                Submit selection
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </section>
