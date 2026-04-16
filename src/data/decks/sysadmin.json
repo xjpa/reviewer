@@ -1,0 +1,89 @@
+{
+  "id": "sysadmin",
+  "title": "Server / Systems Administration",
+  "description": "Cover the operational basics needed to troubleshoot hosts, services, and routine production issues.",
+  "reviewer": {
+    "summary": "For sysadmin interviews, you do not need to look like a career ops engineer. You need to show calm troubleshooting, Linux familiarity, and the ability to inspect evidence before acting.",
+    "interviewFocus": [
+      "Do you inspect service state before changing things?",
+      "Can you navigate logs, files, processes, and permissions confidently?",
+      "Can you explain a safe troubleshooting sequence?",
+      "Do you understand common Linux operational primitives?"
+    ],
+    "sections": [
+      {
+        "id": "must-know",
+        "title": "Must Know In Time For Interviews",
+        "points": [
+          "Know how to inspect a process, a service, file permissions, disk usage, and recent logs.",
+          "Understand the difference between symptom, evidence, and root cause.",
+          "Be able to explain why rebooting first is usually sloppy troubleshooting."
+        ]
+      },
+      {
+        "id": "sequence",
+        "title": "Suggested Crash-Course Sequence",
+        "points": [
+          "Start with shell navigation and filesystem permissions.",
+          "Then learn processes, services, and logs, followed by monitoring and troubleshooting flow.",
+          "Treat package management and mounts as supporting topics rather than the first thing to memorize."
+        ]
+      },
+      {
+        "id": "mistakes",
+        "title": "What Usually Fails People",
+        "points": [
+          "Changing the system before collecting evidence.",
+          "Confusing file ownership issues with application logic bugs.",
+          "Giving hand-wavy answers with no concrete commands or checks."
+        ]
+      }
+    ]
+  },
+  "chapters": [
+    { "id": "linux-shell", "title": "Linux Shell Basics", "focus": "Move confidently through a Unix-like system." },
+    { "id": "files-permissions", "title": "Files & Permissions", "focus": "Read, write, own, and protect files correctly." },
+    { "id": "processes-services", "title": "Processes & Services", "focus": "Inspect, stop, restart, and diagnose running programs." },
+    { "id": "packages", "title": "Package Management", "focus": "Install and update software with intent." },
+    { "id": "logs", "title": "Logs & Debugging", "focus": "Use logs to form and test operational hypotheses." },
+    { "id": "storage", "title": "Storage & Mounts", "focus": "Understand disks, space pressure, and mount points." },
+    { "id": "monitoring", "title": "Monitoring", "focus": "Know what healthy vs unhealthy looks like." },
+    { "id": "troubleshooting", "title": "Troubleshooting", "focus": "Work from symptom to root cause methodically." }
+  ],
+  "questions": [
+    {
+      "id": "sys-s001",
+      "code": "sys-s001",
+      "unitId": "sysadmin",
+      "chapterId": "processes-services",
+      "prompt": "A web service is down after deploy. What is the strongest first operational move?",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "Reboot the whole server immediately" },
+        { "id": "b", "label": "Check service status and recent logs before taking larger action" },
+        { "id": "c", "label": "Delete the logs to reduce noise" },
+        { "id": "d", "label": "Upgrade all packages in case a dependency is broken" }
+      ],
+      "correctChoiceIds": ["b"],
+      "explanation": "Strong operators inspect service state and evidence first. Rebooting before inspection destroys signal and widens the blast radius.",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sys-m002",
+      "code": "sys-m002",
+      "unitId": "sysadmin",
+      "chapterId": "files-permissions",
+      "prompt": "Which issues are commonly caused by incorrect file permissions?",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "An app cannot read its config file" },
+        { "id": "b", "label": "A non-root user cannot write to a deployment directory" },
+        { "id": "c", "label": "DNS lookups start timing out" },
+        { "id": "d", "label": "A service account can read secrets it should not see" }
+      ],
+      "correctChoiceIds": ["a", "b", "d"],
+      "explanation": "Permission mistakes can block legitimate access or expose sensitive files. DNS timeouts are a different class of problem.",
+      "estimatedSeconds": 40
+    }
+  ]
+}

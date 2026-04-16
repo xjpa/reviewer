@@ -1,0 +1,383 @@
+{
+  "id": "cybersecurity",
+  "title": "Cybersecurity",
+  "description": "Focus on the practical security concepts that show up in engineering interviews and real systems work.",
+  "reviewer": {
+    "summary": "This reviewer is built around the practical cybersecurity discussion that shows up in engineering interviews and real systems work: how identity is checked, how common bugs happen, what encryption actually does, how secrets should be handled, how blast radius is reduced, how systems are hardened, how incidents are handled, and how to reason about threats before code ships.",
+    "interviewFocus": [
+      "Can you separate authentication from authorization without mixing them up?",
+      "Can you explain common vulnerabilities and their first-line mitigations clearly?",
+      "Do you know what encryption, hashing, and signatures each do and do not do?",
+      "Can you connect secrets, least privilege, secure configuration, incidents, and threat modeling into one coherent system answer?"
+    ],
+    "sections": [
+      {
+        "id": "auth-review",
+        "title": "Authentication and Authorization",
+        "points": [
+          "Authentication answers who are you. Authorization answers what are you allowed to do. If you confuse them, you sound junior immediately.",
+          "A modern answer should mention MFA, and a stronger answer should mention phishing-resistant options like WebAuthn or passkeys. Passwords by themselves are not phishing-resistant.",
+          "If passwords exist, say the current thing correctly: allow long passwords or passphrases, avoid silent truncation, avoid arbitrary forced resets, allow password managers and paste, and store passwords only as salted adaptive hashes.",
+          "On sessions, remember the boring production details: random high-entropy session IDs, never in the URL, invalidation on logout, idle timeout, and absolute timeout.",
+          "For authorization, memorize four principles: deny by default, validate permissions on every request, enforce server-side, and test access-control logic."
+        ]
+      },
+      {
+        "id": "vulns-review",
+        "title": "Common Vulnerabilities",
+        "points": [
+          "The high-frequency classes to know cold are broken access control, injection, XSS, CSRF, security misconfiguration, vulnerable or outdated components, and SSRF.",
+          "Broken access control means the user got in but the system failed to constrain what they could touch.",
+          "For SQL injection, the one mitigation you must never forget is parameterized queries or prepared statements instead of string concatenation.",
+          "For XSS, say context-appropriate output encoding, safe sinks like textContent instead of innerHTML, and sanitization when user-authored HTML is allowed.",
+          "For CSRF in cookie-authenticated apps, remember synchronizer tokens: server-generated, unique, secret, unpredictable, and validated by the backend."
+        ]
+      },
+      {
+        "id": "crypto-review",
+        "title": "Encryption Basics",
+        "points": [
+          "Encryption primarily provides confidentiality and is reversible with the right key. Integrity and authenticity usually need additional mechanisms or protocols.",
+          "Symmetric cryptography uses one key for both directions and is good for bulk data. Asymmetric cryptography uses separate keys and is useful for key exchange, signatures, and identity.",
+          "Digital signatures provide authenticity and integrity, not confidentiality. Beginners often get this wrong.",
+          "For web traffic, a practical answer is HTTPS everywhere, modern TLS, disable old protocols and weak ciphers, and keep crypto libraries patched.",
+          "Say the magic sentence correctly: passwords should be hashed, not encrypted."
+        ]
+      },
+      {
+        "id": "secrets-review",
+        "title": "Secrets Management",
+        "points": [
+          "Secrets include API keys, database passwords, SSH keys, bearer tokens, certificates, and similar credentials.",
+          "The mature answer is centralize secrets in a manager that supports provisioning, auditing, access control, and rotation rather than scattering them through code and config.",
+          "Rotation is not optional. Strong answers mention revocation, rotation, short-lived credentials where possible, and visibility into who accessed which secret and when.",
+          "Secrets should never be logged in plaintext, and an exposed secret should be treated as compromised immediately."
+        ]
+      },
+      {
+        "id": "priv-review",
+        "title": "Least Privilege",
+        "points": [
+          "Least privilege means restricting users and processes to the minimum privileges necessary for assigned tasks.",
+          "Apply it to people, service accounts, databases, pipelines, and infrastructure, not just human user roles.",
+          "Separate privileged and normal accounts. Even admins should use non-privileged accounts for normal work.",
+          "A good blast-radius answer mentions separate credentials per service, narrow scope, per-request authorization, and the assumption that some part of the environment may already be compromised."
+        ]
+      },
+      {
+        "id": "config-review",
+        "title": "Secure Configuration",
+        "points": [
+          "Secure configuration means removing dangerous defaults before attackers find them: default accounts, sample apps, open admin pages, unnecessary services, weak framework settings, verbose errors, missing headers, and outdated software.",
+          "A hardened deployment answer should mention repeatable baselines, patching, segmentation, exposing only required ports, secure authentication, TLS, secrets protection, safe error handling, and automated checks.",
+          "For databases and internal services, mention isolation, low-privileged service accounts, restricted host access, authentication even for local connections, protected backups, and TLS for traffic."
+        ]
+      },
+      {
+        "id": "incident-review",
+        "title": "Incident Response Basics",
+        "points": [
+          "The useful memory aid is preparation; detection and analysis; containment, eradication, and recovery; post-incident activity.",
+          "The operational flow matters more than the label: confirm whether it is an incident, document immediately, prioritize based on impact, preserve evidence when needed, contain, eradicate the cause, recover safely, and finish with lessons learned.",
+          "Containment is a tradeoff, not a reflex. Think about damage, evidence preservation, service availability, time, and whether the chosen containment actually helps.",
+          "Lessons learned and follow-up reporting are not optional. They are one of the most important and most often omitted parts."
+        ]
+      },
+      {
+        "id": "threat-review",
+        "title": "Threat Modeling",
+        "points": [
+          "Threat modeling is a structured, repeatable way to reason about a system from an adversarial perspective before code ships.",
+          "The four practical questions are: What are we working on? What can go wrong? What are we going to do about it? Did we do a good enough job?",
+          "Know STRIDE: Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, and Elevation of Privilege.",
+          "Good answers mention assets, trust boundaries, data flows, major threats, chosen mitigations, and whether the model still matches the real system."
+        ]
+      }
+    ]
+  },
+  "chapters": [
+    { "id": "auth", "title": "Authentication & Authorization", "focus": "Know who the user is and what they can do." },
+    { "id": "common-vulns", "title": "Common Vulnerabilities", "focus": "Spot high-frequency attack classes quickly." },
+    { "id": "encryption", "title": "Encryption Basics", "focus": "Understand what encryption actually protects." },
+    { "id": "secrets", "title": "Secrets Management", "focus": "Keep credentials out of places they do not belong." },
+    { "id": "least-privilege", "title": "Least Privilege", "focus": "Limit blast radius by default." },
+    { "id": "secure-config", "title": "Secure Configuration", "focus": "Avoid dangerous defaults and exposed services." },
+    { "id": "incident-response", "title": "Incident Response Basics", "focus": "Contain, investigate, and recover in order." },
+    { "id": "threat-modeling", "title": "Threat Modeling", "focus": "Think through assets, actors, and abuse paths." }
+  ],
+  "questions": [
+    {
+      "id": "sec-auth-001",
+      "code": "sec-auth-001",
+      "unitId": "cybersecurity",
+      "chapterId": "auth",
+      "prompt": "Which statement cleanly separates authentication from authorization?",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "Authentication decides what a user may do, and authorization confirms their identity." },
+        { "id": "b", "label": "Authentication answers who the claimant is; authorization answers what the authenticated entity may do." },
+        { "id": "c", "label": "They are the same thing as long as MFA is enabled." },
+        { "id": "d", "label": "Authorization happens first because permissions decide login success." }
+      ],
+      "correctChoiceIds": ["b"],
+      "explanation": "A strong answer distinguishes identity proof from permission checks. Mixing them up is one of the fastest ways to sound weak in a security interview.",
+      "studyNote": "Interview-safe sentence\n\nAuthentication = who are you?\nAuthorization = what are you allowed to do?",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sec-auth-002",
+      "code": "sec-auth-002",
+      "unitId": "cybersecurity",
+      "chapterId": "auth",
+      "prompt": "Which controls fit a modern secure login and access answer for an internal system?",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "MFA with a phishing-resistant option where possible" },
+        { "id": "b", "label": "Passwords stored as salted adaptive hashes" },
+        { "id": "c", "label": "Server-side deny-by-default authorization checks on every request" },
+        { "id": "d", "label": "Session IDs placed in URLs so debugging is easier" }
+      ],
+      "correctChoiceIds": ["a", "b", "c"],
+      "explanation": "This bundles the baseline controls the reviewer emphasized: phishing-resistant MFA, proper password storage, and server-side authorization with deny-by-default behavior. URL session IDs are a bad production habit.",
+      "estimatedSeconds": 40
+    },
+    {
+      "id": "sec-vuln-001",
+      "code": "sec-vuln-001",
+      "unitId": "cybersecurity",
+      "chapterId": "common-vulns",
+      "prompt": "A user changes an object ID in a request and can view another user's record. What is the core vulnerability class?",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "Broken access control" },
+        { "id": "b", "label": "TLS downgrade" },
+        { "id": "c", "label": "Password spraying" },
+        { "id": "d", "label": "Hash collision" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "The user may already be authenticated, but the system failed to constrain what they were authorized to access. That is classic broken access control.",
+      "estimatedSeconds": 30
+    },
+    {
+      "id": "sec-vuln-002",
+      "code": "sec-vuln-002",
+      "unitId": "cybersecurity",
+      "chapterId": "common-vulns",
+      "prompt": "Which mitigations are the most direct first-line responses to the corresponding common bugs?",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "Parameterized queries for injection" },
+        { "id": "b", "label": "Context-appropriate output encoding and safe sinks for XSS" },
+        { "id": "c", "label": "Synchronizer tokens for CSRF in cookie-authenticated apps" },
+        { "id": "d", "label": "Storing session IDs in URLs to mitigate SSRF" }
+      ],
+      "correctChoiceIds": ["a", "b", "c"],
+      "explanation": "These are the practical mitigations that repeatedly show up in real systems. URL session IDs do not mitigate SSRF and create other problems.",
+      "estimatedSeconds": 45
+    },
+    {
+      "id": "sec-enc-001",
+      "code": "sec-enc-001",
+      "unitId": "cybersecurity",
+      "chapterId": "encryption",
+      "prompt": "What is the safest short answer to 'What does encryption protect?'",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "Primarily confidentiality; integrity and authenticity often need additional mechanisms or protocols." },
+        { "id": "b", "label": "Only authenticity, because ciphertext proves the sender." },
+        { "id": "c", "label": "Everything automatically, including non-repudiation." },
+        { "id": "d", "label": "Only password verification." }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "This is the clean, current answer. Encryption is about confidentiality first. Integrity and authenticity often come from signatures, MACs, or the protocol that wraps the encryption.",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sec-enc-002",
+      "code": "sec-enc-002",
+      "unitId": "cybersecurity",
+      "chapterId": "encryption",
+      "prompt": "Which distinctions are correct?",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "Symmetric crypto uses one key and is good for bulk data." },
+        { "id": "b", "label": "Asymmetric crypto uses separate keys and is useful for key exchange and signatures." },
+        { "id": "c", "label": "Digital signatures provide authenticity and integrity, not confidentiality." },
+        { "id": "d", "label": "Passwords should usually be encrypted instead of hashed." }
+      ],
+      "correctChoiceIds": ["a", "b", "c"],
+      "explanation": "These are the core distinctions interviewers expect you to state cleanly. Passwords should be hashed, not encrypted, for verification.",
+      "estimatedSeconds": 40
+    },
+    {
+      "id": "sec-secret-001",
+      "code": "sec-secret-001",
+      "unitId": "cybersecurity",
+      "chapterId": "secrets",
+      "prompt": "An API key was committed to a repository. What is the strongest immediate stance?",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "Treat it as compromised, revoke and rotate it, and investigate exposure." },
+        { "id": "b", "label": "Leave it alone if the repository is private." },
+        { "id": "c", "label": "Only delete the commit locally and continue using the key." },
+        { "id": "d", "label": "Base64-encode it next time and keep it in the repo." }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "Once a credential is exposed in source control, the right assumption is compromise. A mature answer includes revocation, rotation, cleanup, and review of possible abuse.",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sec-secret-002",
+      "code": "sec-secret-002",
+      "unitId": "cybersecurity",
+      "chapterId": "secrets",
+      "prompt": "Which practices belong in a mature secrets-management program?",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "Central storage, access control, and auditing" },
+        { "id": "b", "label": "Rotation and revocation workflows" },
+        { "id": "c", "label": "Short-lived or dynamic secrets where feasible" },
+        { "id": "d", "label": "Plaintext logging of secrets so responders can inspect them later" }
+      ],
+      "correctChoiceIds": ["a", "b", "c"],
+      "explanation": "The reviewer emphasized centralization, fine-grained access control, auditing, rotation, and reduced lifetime. Plaintext secret logging is the opposite of mature handling.",
+      "estimatedSeconds": 40
+    },
+    {
+      "id": "sec-priv-001",
+      "code": "sec-priv-001",
+      "unitId": "cybersecurity",
+      "chapterId": "least-privilege",
+      "prompt": "What does least privilege mean in the strongest practical sense?",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "Restrict users and processes to the minimum privileges necessary for assigned tasks." },
+        { "id": "b", "label": "Give broad access by default and remove it later if misuse is observed." },
+        { "id": "c", "label": "Use only one admin account so permission management stays simple." },
+        { "id": "d", "label": "Keep databases behind a firewall and skip per-request access decisions." }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "That is the practical definition you want to be able to say cleanly. Strong answers then extend it to humans, services, databases, and infrastructure.",
+      "estimatedSeconds": 30
+    },
+    {
+      "id": "sec-priv-002",
+      "code": "sec-priv-002",
+      "unitId": "cybersecurity",
+      "chapterId": "least-privilege",
+      "prompt": "Which changes actually reduce blast radius?",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "Separate privileged and non-privileged accounts" },
+        { "id": "b", "label": "Give each service its own credentials" },
+        { "id": "c", "label": "Scope credentials to the smallest host, resource, or function set possible" },
+        { "id": "d", "label": "Reuse the same high-privilege credential across all services for easier rotation" }
+      ],
+      "correctChoiceIds": ["a", "b", "c"],
+      "explanation": "Blast radius shrinks when identities and permissions are separated, narrowly scoped, and not reused everywhere.",
+      "estimatedSeconds": 40
+    },
+    {
+      "id": "sec-config-001",
+      "code": "sec-config-001",
+      "unitId": "cybersecurity",
+      "chapterId": "secure-config",
+      "prompt": "Which issues are classic signs of security misconfiguration?",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "Default accounts or sample apps left enabled" },
+        { "id": "b", "label": "Unnecessary services or open ports" },
+        { "id": "c", "label": "Verbose stack traces exposed to users" },
+        { "id": "d", "label": "Prepared statements used for SQL queries" }
+      ],
+      "correctChoiceIds": ["a", "b", "c"],
+      "explanation": "These are all concrete hardening failures. Prepared statements are a mitigation, not a misconfiguration symptom.",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sec-config-002",
+      "code": "sec-config-002",
+      "unitId": "cybersecurity",
+      "chapterId": "secure-config",
+      "prompt": "How would you harden a fresh app or server deployment in a way that sounds production-aware?",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "Remove unnecessary services and default accounts, patch regularly, and expose only required ports." },
+        { "id": "b", "label": "Require secure authentication, TLS, safe error handling, and protected secrets/backups." },
+        { "id": "c", "label": "Use a repeatable hardened baseline and automated verification." },
+        { "id": "d", "label": "Keep sample admin pages around as long as they are not linked from the homepage." }
+      ],
+      "correctChoiceIds": ["a", "b", "c"],
+      "explanation": "This is the shape of a strong hardening answer: baseline, minimal exposure, secure defaults, patching, segmentation, and verification.",
+      "estimatedSeconds": 45
+    },
+    {
+      "id": "sec-ir-001",
+      "code": "sec-ir-001",
+      "unitId": "cybersecurity",
+      "chapterId": "incident-response",
+      "prompt": "Which sequence best matches a strong incident-response flow?",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "Confirm and analyze, document, prioritize, contain, eradicate, recover, then run lessons learned." },
+        { "id": "b", "label": "Immediately wipe systems, then decide whether an incident happened." },
+        { "id": "c", "label": "Contain first, skip documentation, and investigate only if customers complain." },
+        { "id": "d", "label": "Recover service first, then think about whether evidence matters." }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "The order may vary at the edges, but strong incident handling includes analysis, documentation, prioritization, containment, eradication, recovery, and post-incident learning.",
+      "estimatedSeconds": 40
+    },
+    {
+      "id": "sec-ir-002",
+      "code": "sec-ir-002",
+      "unitId": "cybersecurity",
+      "chapterId": "incident-response",
+      "prompt": "Why is containment a tradeoff instead of an automatic reflex?",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "You must balance damage reduction, evidence preservation, and service availability." },
+        { "id": "b", "label": "Network isolation does not always stop all local damage immediately." },
+        { "id": "c", "label": "The most disruptive action is always the most correct." },
+        { "id": "d", "label": "Time, resources, and likely effectiveness matter." }
+      ],
+      "correctChoiceIds": ["a", "b", "d"],
+      "explanation": "Experienced responders know containment is a judgment call. The most aggressive action is not automatically the smartest one.",
+      "estimatedSeconds": 40
+    },
+    {
+      "id": "sec-threat-001",
+      "code": "sec-threat-001",
+      "unitId": "cybersecurity",
+      "chapterId": "threat-modeling",
+      "prompt": "Which four questions are the useful threat-modeling backbone?",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "What are we working on? What can go wrong? What are we going to do about it? Did we do a good enough job?" },
+        { "id": "b", "label": "Who wrote the code? When was it deployed? Which cloud is used? How many users exist?" },
+        { "id": "c", "label": "Which scanner ran? Which CVEs were found? Which tickets were opened? Which alerts fired?" },
+        { "id": "d", "label": "What is the password policy? What is the patch window? What is the retention period? What is the SLA?" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "That is the clean framework to memorize. It keeps the exercise grounded in system understanding, threats, responses, and adequacy.",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sec-threat-002",
+      "code": "sec-threat-002",
+      "unitId": "cybersecurity",
+      "chapterId": "threat-modeling",
+      "prompt": "Which items belong in a practical threat-modeling answer for a new internal app?",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "Assets, data flows, trust boundaries, and external entities" },
+        { "id": "b", "label": "STRIDE-style threat categories or similar threat enumeration" },
+        { "id": "c", "label": "A response for each major threat: mitigate, eliminate, transfer, or accept" },
+        { "id": "d", "label": "A guarantee that no threats remain once the model is written" }
+      ],
+      "correctChoiceIds": ["a", "b", "c"],
+      "explanation": "Strong threat modeling is structured and explicit. It does not promise the absence of all threats; it makes the major ones visible and actionable.",
+      "estimatedSeconds": 40
+    }
+  ]
+}

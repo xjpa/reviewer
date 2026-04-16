@@ -1,0 +1,89 @@
+{
+  "id": "behavioral",
+  "title": "Behavioral",
+  "description": "Scenario-based workplace judgment for interviews: what strong responses sound like, and why.",
+  "reviewer": {
+    "summary": "Behavioral interviews are not about sounding polished. They are about demonstrating judgment under real workplace pressure: ownership, conflict, ambiguity, prioritization, and communication.",
+    "interviewFocus": [
+      "Do you take accountability without self-protective deflection?",
+      "Can you describe concrete actions, not vague values?",
+      "Do your stories sound like real work rather than rehearsed slogans?",
+      "Can you explain tradeoffs, conflict, and recovery with maturity?"
+    ],
+    "sections": [
+      {
+        "id": "must-know",
+        "title": "Must Know In Time For Interviews",
+        "points": [
+          "Prepare strong stories for ownership, failure, conflict, prioritization, and leadership.",
+          "Answer with situation, action, reasoning, and result instead of generic claims about yourself.",
+          "Make the learning explicit, especially when the story includes a mistake."
+        ]
+      },
+      {
+        "id": "sequence",
+        "title": "Suggested Crash-Course Sequence",
+        "points": [
+          "Start by listing actual work scenarios you have lived through.",
+          "Map each story to one or two themes like ownership or communication.",
+          "Practice saying what you did, why you did it, and what changed afterward."
+        ]
+      },
+      {
+        "id": "mistakes",
+        "title": "What Usually Fails People",
+        "points": [
+          "Telling stories where they were present but did not actually drive the outcome.",
+          "Avoiding hard details because they want to sound perfect.",
+          "Explaining events without showing judgment, tradeoffs, or learning."
+        ]
+      }
+    ]
+  },
+  "chapters": [
+    { "id": "ownership", "title": "Ownership", "focus": "Take responsibility without being passive or performative." },
+    { "id": "conflict", "title": "Conflict Resolution", "focus": "Handle disagreement without making it personal." },
+    { "id": "failure", "title": "Failure & Recovery", "focus": "Respond to mistakes with accountability and learning." },
+    { "id": "leadership", "title": "Leadership", "focus": "Influence outcomes without waiting for permission." },
+    { "id": "prioritization", "title": "Prioritization", "focus": "Choose tradeoffs under pressure and constraint." },
+    { "id": "ambiguity", "title": "Ambiguity", "focus": "Create clarity when the path is not already given." },
+    { "id": "communication", "title": "Communication", "focus": "Tailor the message to the audience and stakes." },
+    { "id": "stakeholders", "title": "Stakeholder Management", "focus": "Handle competing expectations like an adult at work." }
+  ],
+  "questions": [
+    {
+      "id": "beh-s001",
+      "code": "beh-s001",
+      "unitId": "behavioral",
+      "chapterId": "ownership",
+      "prompt": "A release you led caused customer-visible breakage. What response is strongest in an interview?",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "Explain that QA should have caught it" },
+        { "id": "b", "label": "Own the miss, explain containment, and describe what you changed afterward" },
+        { "id": "c", "label": "Focus on how hard the project was so the mistake seems understandable" },
+        { "id": "d", "label": "Say incidents happen and move on quickly" }
+      ],
+      "correctChoiceIds": ["b"],
+      "explanation": "Strong behavioral answers show accountability, response under pressure, and concrete learning. Deflection is a weak signal.",
+      "estimatedSeconds": 40
+    },
+    {
+      "id": "beh-m002",
+      "code": "beh-m002",
+      "unitId": "behavioral",
+      "chapterId": "conflict",
+      "prompt": "You disagree with a teammate on the implementation path. Which actions usually signal maturity?",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "Clarify the decision criteria and tradeoffs first" },
+        { "id": "b", "label": "Escalate immediately so someone else decides" },
+        { "id": "c", "label": "Look for evidence, small experiments, or a reversible path" },
+        { "id": "d", "label": "Frame the disagreement around the work, not the person" }
+      ],
+      "correctChoiceIds": ["a", "c", "d"],
+      "explanation": "Good conflict handling lowers emotion, increases evidence, and keeps the discussion tied to outcomes rather than ego.",
+      "estimatedSeconds": 45
+    }
+  ]
+}

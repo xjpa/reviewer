@@ -1,0 +1,511 @@
+{
+  "id": "sql",
+  "title": "SQL",
+  "description": "Practice the query patterns that actually show up in interviews and analytics take-homes.",
+  "reviewer": {
+    "summary": "If you know almost no SQL, the fastest path is to memorize the shape of common queries and always reason from rows: what rows exist now, what rows do I want next, and what clause changes that shape.",
+    "interviewFocus": [
+      "Can you write the basic query skeleton from memory?",
+      "Can you explain how joins and grouping change row shape?",
+      "Can you use examples to reason instead of guessing syntax?",
+      "Can you solve variants of familiar patterns by changing only a few clauses?"
+    ],
+    "sections": [
+      {
+        "id": "must-know",
+        "title": "Must Know In Time For Interviews",
+        "points": [
+          "Memorize the standard order of thinking: FROM, JOIN, WHERE, GROUP BY, HAVING, SELECT, ORDER BY, LIMIT.",
+          "Practice joins and aggregates heavily because most interview SQL mistakes come from wrong row shape.",
+          "Learn a few reliable templates for joins, GROUP BY, subqueries, CTEs, and windows, then adapt from them."
+        ]
+      },
+      {
+        "id": "sequence",
+        "title": "Suggested Crash-Course Sequence",
+        "points": [
+          "Start with SELECT, WHERE, ORDER BY until the syntax feels automatic.",
+          "Then learn joins, then GROUP BY and aggregates, then subqueries and CTEs.",
+          "Only after that spend serious time on window functions, schema design, and indexing."
+        ]
+      },
+      {
+        "id": "mistakes",
+        "title": "What Usually Fails People",
+        "points": [
+          "Writing syntax from memory without checking whether the rows make sense.",
+          "Forgetting that joins can duplicate rows before aggregation.",
+          "Grouping at the wrong grain or selecting columns that do not match that grain."
+        ]
+      }
+    ]
+  },
+  "chapters": [
+    { "id": "select-basics", "title": "SELECT / WHERE / ORDER BY", "focus": "Filter and shape result sets correctly." },
+    { "id": "joins", "title": "Joins", "focus": "Combine tables without dropping or duplicating rows by accident." },
+    { "id": "group-by", "title": "GROUP BY & Aggregates", "focus": "Summarize data at the right grain." },
+    { "id": "subqueries", "title": "Subqueries", "focus": "Use nested filtering and derived sets." },
+    { "id": "ctes", "title": "CTEs", "focus": "Break long queries into readable steps." },
+    { "id": "window-functions", "title": "Window Functions", "focus": "Rank, partition, and compute rolling stats." },
+    { "id": "schema-design", "title": "Schema Design", "focus": "Pick stable table structure and keys." },
+    { "id": "indexing", "title": "Indexes & Tuning", "focus": "Know what makes a query fast or expensive." }
+  ],
+  "questions": [
+    {
+      "id": "sql-s001",
+      "code": "sql-s001",
+      "unitId": "sql",
+      "chapterId": "select-basics",
+      "prompt": "You want each employee's name and salary. Which query shape is correct?",
+      "codeSnippet": "-- table: employees(id, name, salary, team)\n-- goal: show name and salary only",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "SELECT name, salary FROM employees;" },
+        { "id": "b", "label": "SELECT employees INTO name, salary;" },
+        { "id": "c", "label": "FROM employees SELECT name salary;" },
+        { "id": "d", "label": "GET name, salary FROM employees;" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "The baseline SQL template is SELECT columns FROM table. Start there and only add clauses when the problem needs them.",
+      "studyNote": "Base syntax to memorize\n\nSELECT column_1, column_2\nFROM table_name;",
+      "estimatedSeconds": 30
+    },
+    {
+      "id": "sql-s002",
+      "code": "sql-s002",
+      "unitId": "sql",
+      "chapterId": "select-basics",
+      "prompt": "You only want employees in the 'Sales' team, ordered by salary descending. Which clauses do you need?",
+      "codeSnippet": "-- table: employees(id, name, salary, team)\n-- goal: only Sales rows, highest salary first",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "WHERE team = 'Sales'" },
+        { "id": "b", "label": "ORDER BY salary DESC" },
+        { "id": "c", "label": "GROUP BY salary" },
+        { "id": "d", "label": "HAVING team = 'Sales'" }
+      ],
+      "correctChoiceIds": ["a", "b"],
+      "explanation": "WHERE filters rows before they are returned. ORDER BY controls display order. GROUP BY and HAVING are for grouped results, not simple row filtering.",
+      "studyNote": "Common filter + sort template\n\nSELECT name, salary\nFROM employees\nWHERE team = 'Sales'\nORDER BY salary DESC;",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sql-s003",
+      "code": "sql-s003",
+      "unitId": "sql",
+      "chapterId": "select-basics",
+      "prompt": "You want the 5 most recent orders by created_at. What should the query end with?",
+      "codeSnippet": "-- table: orders(id, customer_id, created_at)\n-- goal: newest 5 orders only",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "ORDER BY created_at DESC LIMIT 5" },
+        { "id": "b", "label": "ORDER created_at LIMIT 5 DESC" },
+        { "id": "c", "label": "GROUP BY created_at DESC LIMIT 5" },
+        { "id": "d", "label": "WHERE created_at DESC LIMIT 5" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "To get the top N rows by some ordering, sort first and then limit the number of rows returned.",
+      "studyNote": "Top N template\n\nSELECT *\nFROM orders\nORDER BY created_at DESC\nLIMIT 5;",
+      "estimatedSeconds": 30
+    },
+    {
+      "id": "sql-j001",
+      "code": "sql-j001",
+      "unitId": "sql",
+      "chapterId": "joins",
+      "prompt": "You need every customer, even those with no orders. Which join is correct?",
+      "codeSnippet": "-- customers(id, name)\n-- orders(id, customer_id, total)\n-- goal: list all customers with any matching order data if it exists",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "FROM customers c LEFT JOIN orders o ON c.id = o.customer_id" },
+        { "id": "b", "label": "FROM customers c INNER JOIN orders o ON c.id = o.customer_id" },
+        { "id": "c", "label": "FROM customers c CROSS JOIN orders o" },
+        { "id": "d", "label": "FROM customers c SELF JOIN orders o ON c.id = o.id" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "LEFT JOIN keeps all rows from the left table and fills missing matches with nulls. That is the standard answer when the prompt says 'include even if none exist.'",
+      "studyNote": "Keep all left-side rows template\n\nSELECT c.name, o.total\nFROM customers c\nLEFT JOIN orders o\n  ON c.id = o.customer_id;",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sql-j002",
+      "code": "sql-j002",
+      "unitId": "sql",
+      "chapterId": "joins",
+      "prompt": "What is the main first-principles risk after joining a one-to-many table like customers to orders?",
+      "codeSnippet": "-- one customer can have many orders",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "Rows can multiply, which can distort later counts and sums" },
+        { "id": "b", "label": "SQL stops allowing ORDER BY after a join" },
+        { "id": "c", "label": "Joined tables cannot use WHERE anymore" },
+        { "id": "d", "label": "The database converts numbers into strings" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "The most important habit in SQL is watching row shape. A one-to-many join often increases row count, which can make downstream aggregates wrong if you ignore it.",
+      "studyNote": "Join first-principles question\n\nAfter a join, ask:\n- How many rows did I have before?\n- How many rows do I have now?\n- Did one row turn into many rows?",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sql-j003",
+      "code": "sql-j003",
+      "unitId": "sql",
+      "chapterId": "joins",
+      "prompt": "Which join condition is correct for customers and orders?",
+      "codeSnippet": "-- customers(id, name)\n-- orders(id, customer_id, total)\n-- choose the key relationship",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "ON customers.id = orders.customer_id" },
+        { "id": "b", "label": "ON customers.name = orders.id" },
+        { "id": "c", "label": "ON customers.id = orders.total" },
+        { "id": "d", "label": "ON customers.customer_id = orders.id" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "Join keys should match the primary key of one table to the foreign key in the other. Here, orders.customer_id points to customers.id.",
+      "studyNote": "Key-matching habit\n\nPrimary key -> foreign key\ncustomers.id = orders.customer_id",
+      "estimatedSeconds": 30
+    },
+    {
+      "id": "sql-g001",
+      "code": "sql-g001",
+      "unitId": "sql",
+      "chapterId": "group-by",
+      "prompt": "You want the number of orders per customer_id. Which query shape is correct?",
+      "codeSnippet": "-- orders(id, customer_id, total)\n-- goal: one row per customer_id with count of orders",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "SELECT customer_id, COUNT(*) FROM orders GROUP BY customer_id;" },
+        { "id": "b", "label": "SELECT customer_id, COUNT(*) FROM orders;" },
+        { "id": "c", "label": "SELECT COUNT(customer_id) GROUP BY orders;" },
+        { "id": "d", "label": "SELECT customer_id, COUNT(*) FROM orders ORDER BY customer_id GROUP BY total;" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "When you want one row per category, group by that category and aggregate the rows inside each group.",
+      "studyNote": "Core aggregate template\n\nSELECT customer_id, COUNT(*) AS order_count\nFROM orders\nGROUP BY customer_id;",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sql-g002",
+      "code": "sql-g002",
+      "unitId": "sql",
+      "chapterId": "group-by",
+      "prompt": "After grouping by customer_id, which kind of columns are safe to select?",
+      "codeSnippet": "-- grouped result: one row per customer_id",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "The grouped column itself, like customer_id" },
+        { "id": "b", "label": "Aggregate expressions like COUNT(*) or SUM(total)" },
+        { "id": "c", "label": "Random ungrouped row-level columns like orders.id" },
+        { "id": "d", "label": "AVG(total)" }
+      ],
+      "correctChoiceIds": ["a", "b", "d"],
+      "explanation": "A grouped query should only select columns that make sense at the new grain: group keys and aggregate results. Raw row-level columns usually violate that grain.",
+      "studyNote": "Grain rule\n\nAfter GROUP BY X:\n- you may select X\n- you may select aggregates\n- you usually may not select raw row-level columns",
+      "estimatedSeconds": 40
+    },
+    {
+      "id": "sql-g003",
+      "code": "sql-g003",
+      "unitId": "sql",
+      "chapterId": "group-by",
+      "prompt": "You only want customers with more than 3 orders. Which clause filters grouped results?",
+      "codeSnippet": "-- goal: keep only groups where COUNT(*) > 3",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "HAVING COUNT(*) > 3" },
+        { "id": "b", "label": "WHERE COUNT(*) > 3" },
+        { "id": "c", "label": "ORDER BY COUNT(*) > 3" },
+        { "id": "d", "label": "LIMIT COUNT(*) > 3" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "WHERE filters raw rows before grouping. HAVING filters the grouped results after aggregates have been computed.",
+      "studyNote": "Grouped filter template\n\nSELECT customer_id, COUNT(*)\nFROM orders\nGROUP BY customer_id\nHAVING COUNT(*) > 3;",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sql-sub001",
+      "code": "sql-sub001",
+      "unitId": "sql",
+      "chapterId": "subqueries",
+      "prompt": "You want employees whose salary is above the company average. Which pattern fits best?",
+      "codeSnippet": "-- employees(id, name, salary)\n-- compare each row to the overall average salary",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "WHERE salary > (SELECT AVG(salary) FROM employees)" },
+        { "id": "b", "label": "GROUP BY salary > AVG(salary)" },
+        { "id": "c", "label": "ORDER BY salary > (AVG salary)" },
+        { "id": "d", "label": "JOIN AVG(salary) WITHOUT a subquery" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "A subquery is useful when you need a single derived value, like the average salary, and then compare each outer row against it.",
+      "studyNote": "Compare to overall aggregate template\n\nSELECT name, salary\nFROM employees\nWHERE salary > (\n    SELECT AVG(salary)\n    FROM employees\n);",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sql-sub002",
+      "code": "sql-sub002",
+      "unitId": "sql",
+      "chapterId": "subqueries",
+      "prompt": "You want customers who have placed at least one order. Which subquery pattern works?",
+      "codeSnippet": "-- customers(id, name)\n-- orders(id, customer_id)\n-- goal: customers whose id appears in orders.customer_id",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "WHERE id IN (SELECT customer_id FROM orders)" },
+        { "id": "b", "label": "WHERE id GROUP BY orders" },
+        { "id": "c", "label": "WHERE id = COUNT(orders)" },
+        { "id": "d", "label": "HAVING id IN orders" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "IN subqueries are a common beginner pattern when you want values from one table that appear in a set produced by another query.",
+      "studyNote": "Membership subquery template\n\nSELECT id, name\nFROM customers\nWHERE id IN (\n    SELECT customer_id\n    FROM orders\n);",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sql-sub003",
+      "code": "sql-sub003",
+      "unitId": "sql",
+      "chapterId": "subqueries",
+      "prompt": "What is the first-principles reason to use a subquery?",
+      "codeSnippet": "-- think in terms of 'use one query's result inside another query'",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "To compute an intermediate value or set that the outer query depends on" },
+        { "id": "b", "label": "Because SQL requires every query to have one" },
+        { "id": "c", "label": "To replace all joins automatically" },
+        { "id": "d", "label": "Only to make the query shorter, never for logic" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "The right mental model is simple: a subquery creates an intermediate value or set, and the outer query uses it.",
+      "studyNote": "Subquery mental model\n\nInner query -> produces value or set\nOuter query -> uses that value or set",
+      "estimatedSeconds": 30
+    },
+    {
+      "id": "sql-cte001",
+      "code": "sql-cte001",
+      "unitId": "sql",
+      "chapterId": "ctes",
+      "prompt": "What is the main reason to use a CTE?",
+      "codeSnippet": "-- CTE = Common Table Expression\nWITH recent_orders AS (\n    SELECT *\n    FROM orders\n    WHERE created_at >= '2025-01-01'\n)\nSELECT *\nFROM recent_orders;",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "To break a query into named, readable steps" },
+        { "id": "b", "label": "Because CTEs are always faster than every other option" },
+        { "id": "c", "label": "To replace SELECT entirely" },
+        { "id": "d", "label": "Because GROUP BY only works inside CTEs" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "The beginner value of CTEs is readability. They let you name an intermediate step and then build on it cleanly.",
+      "studyNote": "CTE template\n\nWITH step_name AS (\n    SELECT ...\n    FROM ...\n    WHERE ...\n)\nSELECT ...\nFROM step_name;",
+      "estimatedSeconds": 30
+    },
+    {
+      "id": "sql-cte002",
+      "code": "sql-cte002",
+      "unitId": "sql",
+      "chapterId": "ctes",
+      "prompt": "You want to first filter recent orders, then aggregate them by customer. What is the clearest pattern?",
+      "codeSnippet": "-- step 1: filter recent orders\n-- step 2: count recent orders per customer",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "Use a CTE for recent_orders, then aggregate from that CTE" },
+        { "id": "b", "label": "Put GROUP BY before the filtering step" },
+        { "id": "c", "label": "Use ORDER BY instead of filtering" },
+        { "id": "d", "label": "Skip the intermediate step and hope the final query stays understandable" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "When you naturally think in steps, a CTE often matches the way you want to reason about the problem.",
+      "studyNote": "Filter then aggregate template\n\nWITH recent_orders AS (\n    SELECT *\n    FROM orders\n    WHERE created_at >= '2025-01-01'\n)\nSELECT customer_id, COUNT(*)\nFROM recent_orders\nGROUP BY customer_id;",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sql-cte003",
+      "code": "sql-cte003",
+      "unitId": "sql",
+      "chapterId": "ctes",
+      "prompt": "Which statement about CTEs is the safest beginner rule?",
+      "codeSnippet": "-- think of CTEs mainly as query organization tools",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "They help you separate logic into named blocks" },
+        { "id": "b", "label": "They can make complex queries easier to debug" },
+        { "id": "c", "label": "They automatically fix bad join logic" },
+        { "id": "d", "label": "They can make repeated logic easier to reuse in the same query" }
+      ],
+      "correctChoiceIds": ["a", "b", "d"],
+      "explanation": "CTEs help structure your work, but they do not magically correct wrong logic. You still need the row reasoning to be right.",
+      "studyNote": "Use CTEs when you catch yourself saying:\n- first get these rows\n- then summarize them\n- then rank or filter the result",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sql-win001",
+      "code": "sql-win001",
+      "unitId": "sql",
+      "chapterId": "window-functions",
+      "prompt": "You want to rank employees by salary within each team. Which window function is the right starting point?",
+      "codeSnippet": "-- employees(name, team, salary)\n-- goal: rank salary within each team",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "ROW_NUMBER() OVER (PARTITION BY team ORDER BY salary DESC)" },
+        { "id": "b", "label": "COUNT(*) OVER (ORDER BY team)" },
+        { "id": "c", "label": "SUM(team) OVER (PARTITION BY salary)" },
+        { "id": "d", "label": "LIMIT 1 OVER team" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "Ranking within groups is one of the most common beginner window-function tasks. Partition defines the group; order defines the rank order.",
+      "studyNote": "Rank within group template\n\nSELECT name, team, salary,\n       ROW_NUMBER() OVER (\n           PARTITION BY team\n           ORDER BY salary DESC\n       ) AS team_rank\nFROM employees;",
+      "estimatedSeconds": 40
+    },
+    {
+      "id": "sql-win002",
+      "code": "sql-win002",
+      "unitId": "sql",
+      "chapterId": "window-functions",
+      "prompt": "What does PARTITION BY do in a window function?",
+      "codeSnippet": "-- example: ROW_NUMBER() OVER (PARTITION BY team ORDER BY salary DESC)",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "It restarts the window calculation separately for each group" },
+        { "id": "b", "label": "It deletes duplicate rows before ranking" },
+        { "id": "c", "label": "It is the same as WHERE" },
+        { "id": "d", "label": "It sorts the final query output automatically" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "PARTITION BY is the window equivalent of 'do this calculation separately within each group.'",
+      "studyNote": "Mental model\n\nPARTITION BY = split rows into groups\nORDER BY = define sequence inside each group",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sql-win003",
+      "code": "sql-win003",
+      "unitId": "sql",
+      "chapterId": "window-functions",
+      "prompt": "You want a running total of daily revenue ordered by day. Which pattern is right?",
+      "codeSnippet": "-- sales(day, revenue)\n-- goal: running total by day",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "SUM(revenue) OVER (ORDER BY day)" },
+        { "id": "b", "label": "GROUP BY day SUM(revenue) OVER" },
+        { "id": "c", "label": "LIMIT revenue ORDER BY day" },
+        { "id": "d", "label": "WHERE SUM(revenue) BY day" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "A running total is a classic window pattern: keep row detail, but add an accumulating sum ordered by time.",
+      "studyNote": "Running total template\n\nSELECT day, revenue,\n       SUM(revenue) OVER (ORDER BY day) AS running_revenue\nFROM sales;",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sql-sch001",
+      "code": "sql-sch001",
+      "unitId": "sql",
+      "chapterId": "schema-design",
+      "prompt": "An order can contain many products, and a product can appear in many orders. What table design is needed?",
+      "codeSnippet": "-- think in terms of relationships between entities",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "A join table such as order_items(order_id, product_id, quantity)" },
+        { "id": "b", "label": "Put all product ids in one comma-separated string on orders" },
+        { "id": "c", "label": "Duplicate the entire product table inside orders" },
+        { "id": "d", "label": "Store product names only and skip ids" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "Many-to-many relationships are normally modeled with a separate join table that stores the relationship rows.",
+      "studyNote": "Many-to-many pattern\n\norders\nproducts\norder_items(order_id, product_id, quantity)",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sql-sch002",
+      "code": "sql-sch002",
+      "unitId": "sql",
+      "chapterId": "schema-design",
+      "prompt": "What is the beginner-friendly purpose of a primary key?",
+      "codeSnippet": "-- example: customers(id, name, email)",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "To uniquely identify each row in the table" },
+        { "id": "b", "label": "To store the most important text column" },
+        { "id": "c", "label": "To automatically sort the table forever" },
+        { "id": "d", "label": "To replace all foreign keys" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "A primary key gives each row a stable identity. That identity is then referenced by foreign keys in related tables.",
+      "studyNote": "Basic schema identity rule\n\nprimary key -> identifies this row\nforeign key -> points to another table's primary key",
+      "estimatedSeconds": 30
+    },
+    {
+      "id": "sql-sch003",
+      "code": "sql-sch003",
+      "unitId": "sql",
+      "chapterId": "schema-design",
+      "prompt": "Which design choice is usually stronger for customer and order data?",
+      "codeSnippet": "-- choose between normalized structure and repeated duplicated data",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "Keep customers in one table and orders in another linked by customer_id" },
+        { "id": "b", "label": "Copy full customer name and address into every order row only" },
+        { "id": "c", "label": "Put customers and orders into one giant wide table" },
+        { "id": "d", "label": "Store orders as one long text blob inside customers" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "A normalized design usually stores entities once and connects them by keys instead of copying all attributes repeatedly into every related row.",
+      "studyNote": "Basic normalization instinct\n\nCustomers are one entity.\nOrders are another entity.\nLink them with customer_id.",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sql-i001",
+      "code": "sql-i001",
+      "unitId": "sql",
+      "chapterId": "indexing",
+      "prompt": "Which query is the clearest candidate for an index on users(email)?",
+      "codeSnippet": "-- assume a large users table",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "SELECT * FROM users WHERE email = 'a@b.com';" },
+        { "id": "b", "label": "SELECT * FROM users;" },
+        { "id": "c", "label": "SELECT COUNT(*) FROM users;" },
+        { "id": "d", "label": "SELECT * FROM users ORDER BY RANDOM();" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "Indexes help most when you filter on a column or small set of columns to find a subset of rows quickly.",
+      "studyNote": "First-principles index rule\n\nIndexes are most useful when the database needs to find matching rows quickly for filters or join keys.",
+      "estimatedSeconds": 30
+    },
+    {
+      "id": "sql-i002",
+      "code": "sql-i002",
+      "unitId": "sql",
+      "chapterId": "indexing",
+      "prompt": "You often filter by customer_id and then order by created_at. Which index is the strongest starting guess?",
+      "codeSnippet": "-- common query pattern:\n-- WHERE customer_id = ?\n-- ORDER BY created_at DESC",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "INDEX(customer_id, created_at)" },
+        { "id": "b", "label": "INDEX(total, notes)" },
+        { "id": "c", "label": "INDEX(created_at, customer_id, total, notes, status, id)" },
+        { "id": "d", "label": "No index could ever help that pattern" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "A composite index is often useful when queries repeatedly filter by one column and then read rows in the order of another column.",
+      "studyNote": "Composite-index instinct\n\nIf query pattern is:\nWHERE A = ?\nORDER BY B\n\nthen a starting guess is often INDEX(A, B)",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "sql-i003",
+      "code": "sql-i003",
+      "unitId": "sql",
+      "chapterId": "indexing",
+      "prompt": "Why is SQL tuning hard if you do not understand the row shape and query logic first?",
+      "codeSnippet": "-- tune only after the query is logically correct",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "You might speed up a query that still returns the wrong answer" },
+        { "id": "b", "label": "Performance work cannot replace understanding joins and grouping" },
+        { "id": "c", "label": "Indexes automatically fix every bad query pattern" },
+        { "id": "d", "label": "A wrong-grain query can stay wrong even if it runs faster" }
+      ],
+      "correctChoiceIds": ["a", "b", "d"],
+      "explanation": "Correctness comes first. Tuning a logically wrong query is just a faster way to get the wrong answer.",
+      "studyNote": "Safe order of work\n\n1. Get the row logic right\n2. Get the result right\n3. Then worry about performance",
+      "estimatedSeconds": 35
+    }
+  ]
+}

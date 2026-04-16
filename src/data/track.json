@@ -1,0 +1,100 @@
+{
+  "id": "interview-maxxing-protocol",
+  "title": "Interview-maxxing protocol",
+  "description": "Deck-based drills for getting from fundamentals to passable interview performance across algorithms, SQL, systems, networking, security, and behavioral scenarios.",
+  "decks": [
+    {
+      "id": "algorithms",
+      "title": "Algorithms (Java)",
+      "description": "Build passable interview fluency in Java through practical fundamentals: input parsing, numbers, strings, arithmetic, and arrays.",
+      "questionCount": 10,
+      "chapters": [
+        { "id": "input-parsing", "title": "Input Parsing", "focus": "Read ints, strings, arrays, and test cases without fumbling Java I/O.", "questionCount": 6 },
+        { "id": "numbers", "title": "Numbers", "focus": "Master the standard number problems that show up constantly in beginner interviews.", "questionCount": 1 },
+        { "id": "string-manipulation", "title": "String Manipulation", "focus": "Traverse, compare, rebuild, and inspect strings safely.", "questionCount": 1 },
+        { "id": "arithmetic-binary", "title": "Arithmetic & Binary Conversion", "focus": "Work through number logic, divisibility, and base conversion step by step.", "questionCount": 1 },
+        { "id": "arrays", "title": "Arrays", "focus": "Scan, update, and summarize arrays without index mistakes.", "questionCount": 1 }
+      ]
+    },
+    {
+      "id": "sql",
+      "title": "SQL",
+      "description": "Practice the query patterns that actually show up in interviews and analytics take-homes.",
+      "questionCount": 24,
+      "chapters": [
+        { "id": "select-basics", "title": "SELECT / WHERE / ORDER BY", "focus": "Filter and shape result sets correctly.", "questionCount": 3 },
+        { "id": "joins", "title": "Joins", "focus": "Combine tables without dropping or duplicating rows by accident.", "questionCount": 3 },
+        { "id": "group-by", "title": "GROUP BY & Aggregates", "focus": "Summarize data at the right grain.", "questionCount": 3 },
+        { "id": "subqueries", "title": "Subqueries", "focus": "Use nested filtering and derived sets.", "questionCount": 3 },
+        { "id": "ctes", "title": "CTEs", "focus": "Break long queries into readable steps.", "questionCount": 3 },
+        { "id": "window-functions", "title": "Window Functions", "focus": "Rank, partition, and compute rolling stats.", "questionCount": 3 },
+        { "id": "schema-design", "title": "Schema Design", "focus": "Pick stable table structure and keys.", "questionCount": 3 },
+        { "id": "indexing", "title": "Indexes & Tuning", "focus": "Know what makes a query fast or expensive.", "questionCount": 3 }
+      ]
+    },
+    {
+      "id": "sysadmin",
+      "title": "Server / Systems Administration",
+      "description": "Cover the operational basics needed to troubleshoot hosts, services, and routine production issues.",
+      "questionCount": 2,
+      "chapters": [
+        { "id": "linux-shell", "title": "Linux Shell Basics", "focus": "Move confidently through a Unix-like system.", "questionCount": 0 },
+        { "id": "files-permissions", "title": "Files & Permissions", "focus": "Read, write, own, and protect files correctly.", "questionCount": 1 },
+        { "id": "processes-services", "title": "Processes & Services", "focus": "Inspect, stop, restart, and diagnose running programs.", "questionCount": 1 },
+        { "id": "packages", "title": "Package Management", "focus": "Install and update software with intent.", "questionCount": 0 },
+        { "id": "logs", "title": "Logs & Debugging", "focus": "Use logs to form and test operational hypotheses.", "questionCount": 0 },
+        { "id": "storage", "title": "Storage & Mounts", "focus": "Understand disks, space pressure, and mount points.", "questionCount": 0 },
+        { "id": "monitoring", "title": "Monitoring", "focus": "Know what healthy vs unhealthy looks like.", "questionCount": 0 },
+        { "id": "troubleshooting", "title": "Troubleshooting", "focus": "Work from symptom to root cause methodically.", "questionCount": 0 }
+      ]
+    },
+    {
+      "id": "networking",
+      "title": "Networking",
+      "description": "Build the network model needed to debug common connectivity and web-service issues.",
+      "questionCount": 2,
+      "chapters": [
+        { "id": "tcp-ip", "title": "OSI / TCP-IP Basics", "focus": "Know what problem lives at which layer.", "questionCount": 0 },
+        { "id": "ip-subnets", "title": "IP Addressing & Subnets", "focus": "Reason about hosts, ranges, and reachability.", "questionCount": 0 },
+        { "id": "dns", "title": "DNS", "focus": "Translate names to addresses and debug resolution failures.", "questionCount": 1 },
+        { "id": "http", "title": "HTTP / HTTPS", "focus": "Understand request flow, status codes, and TLS basics.", "questionCount": 0 },
+        { "id": "routing", "title": "Routing", "focus": "Know where packets go and why they do not arrive.", "questionCount": 0 },
+        { "id": "load-balancing", "title": "Load Balancing", "focus": "Distribute traffic without hiding bottlenecks.", "questionCount": 0 },
+        { "id": "ports-firewalls", "title": "Ports & Firewalls", "focus": "Allow intended traffic and block the rest.", "questionCount": 1 },
+        { "id": "debugging", "title": "Connectivity Debugging", "focus": "Use the right tool for the failing layer.", "questionCount": 0 }
+      ]
+    },
+    {
+      "id": "cybersecurity",
+      "title": "Cybersecurity",
+      "description": "Focus on the practical security concepts that show up in engineering interviews and real systems work.",
+      "questionCount": 16,
+      "chapters": [
+        { "id": "auth", "title": "Authentication & Authorization", "focus": "Know who the user is and what they can do.", "questionCount": 2 },
+        { "id": "common-vulns", "title": "Common Vulnerabilities", "focus": "Spot high-frequency attack classes quickly.", "questionCount": 2 },
+        { "id": "encryption", "title": "Encryption Basics", "focus": "Understand what encryption actually protects.", "questionCount": 2 },
+        { "id": "secrets", "title": "Secrets Management", "focus": "Keep credentials out of places they do not belong.", "questionCount": 2 },
+        { "id": "least-privilege", "title": "Least Privilege", "focus": "Limit blast radius by default.", "questionCount": 2 },
+        { "id": "secure-config", "title": "Secure Configuration", "focus": "Avoid dangerous defaults and exposed services.", "questionCount": 2 },
+        { "id": "incident-response", "title": "Incident Response Basics", "focus": "Contain, investigate, and recover in order.", "questionCount": 2 },
+        { "id": "threat-modeling", "title": "Threat Modeling", "focus": "Think through assets, actors, and abuse paths.", "questionCount": 2 }
+      ]
+    },
+    {
+      "id": "behavioral",
+      "title": "Behavioral",
+      "description": "Scenario-based workplace judgment for interviews: what strong responses sound like, and why.",
+      "questionCount": 2,
+      "chapters": [
+        { "id": "ownership", "title": "Ownership", "focus": "Take responsibility without being passive or performative.", "questionCount": 1 },
+        { "id": "conflict", "title": "Conflict Resolution", "focus": "Handle disagreement without making it personal.", "questionCount": 1 },
+        { "id": "failure", "title": "Failure & Recovery", "focus": "Respond to mistakes with accountability and learning.", "questionCount": 0 },
+        { "id": "leadership", "title": "Leadership", "focus": "Influence outcomes without waiting for permission.", "questionCount": 0 },
+        { "id": "prioritization", "title": "Prioritization", "focus": "Choose tradeoffs under pressure and constraint.", "questionCount": 0 },
+        { "id": "ambiguity", "title": "Ambiguity", "focus": "Create clarity when the path is not already given.", "questionCount": 0 },
+        { "id": "communication", "title": "Communication", "focus": "Tailor the message to the audience and stakes.", "questionCount": 0 },
+        { "id": "stakeholders", "title": "Stakeholder Management", "focus": "Handle competing expectations like an adult at work.", "questionCount": 0 }
+      ]
+    }
+  ]
+}

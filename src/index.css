@@ -1,0 +1,27 @@
+:root {
+  font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #1d2630;
+  background:
+    radial-gradient(circle at top left, rgba(79, 121, 199, 0.13), transparent 24%),
+    radial-gradient(circle at top right, rgba(58, 142, 124, 0.12), transparent 20%),
+    #f4f1e8;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}

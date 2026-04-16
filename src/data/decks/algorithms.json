@@ -1,0 +1,244 @@
+{
+  "id": "algorithms",
+  "title": "Algorithms (Java)",
+  "description": "Build passable interview fluency in Java through practical fundamentals: problem solving, strings, arithmetic/binary conversion, and arrays.",
+  "reviewer": {
+    "summary": "For your Java prep, the goal is to memorize the standard code patterns and library choices that solve beginner interview problems fast. Think in terms of code templates, not vague theory.",
+    "interviewFocus": [
+      "Do you know which Java library or class to reach for immediately?",
+      "Can you write the standard template from memory with minimal hesitation?",
+      "Can you solve simple problems like leap year, reverse string, binary conversion, and array scans in clean Java?",
+      "Can you explain why you chose that tool instead of improvising badly?"
+    ],
+    "sections": [
+      {
+        "id": "must-know",
+        "title": "Must Know In Time For Interviews",
+        "points": [
+          "Memorize clean Java templates for input parsing, if-else decision problems, StringBuilder usage, arithmetic/base conversion loops, and array traversal.",
+          "Know the standard library tools that commonly appear in simple coding rounds: BufferedReader, StringTokenizer, Scanner, StringBuilder, Arrays, ArrayList, HashMap, and Math.",
+          "Practice small real tasks like even or odd, leap year, prime number, palindrome number, factorial, Fibonacci, sum of digits, reverse digits, GCD or LCM, and finding factors or divisors."
+        ]
+      },
+      {
+        "id": "sequence",
+        "title": "Suggested Crash-Course Sequence",
+        "points": [
+          "Start with input parsing until reading ints, strings, arrays, and test cases feels automatic.",
+          "Then drill core number problems like parity, leap year, prime checks, palindrome numbers, factorial, Fibonacci, digit sums, reverse digits, GCD or LCM, and divisors.",
+          "Then memorize string templates with StringBuilder and charAt.",
+          "After that, rehearse arithmetic and binary conversion loops, then finish with array traversal and Arrays helper methods."
+        ]
+      },
+      {
+        "id": "mistakes",
+        "title": "What Usually Fails People",
+        "points": [
+          "Forgetting how to read input quickly and wasting time on boilerplate under pressure.",
+          "Forgetting the exact Java library or method signature they actually need.",
+          "Writing code from first principles every time instead of using a memorized template.",
+          "Making index and condition mistakes on easy problems because the base pattern was not fully internalized."
+        ]
+      }
+    ]
+  },
+  "chapters": [
+    { "id": "input-parsing", "title": "Input Parsing", "focus": "Read ints, strings, arrays, and test cases without fumbling Java I/O." },
+    { "id": "numbers", "title": "Numbers", "focus": "Master the standard number problems that show up constantly in beginner interviews." },
+    { "id": "string-manipulation", "title": "String Manipulation", "focus": "Traverse, compare, rebuild, and inspect strings safely." },
+    { "id": "arithmetic-binary", "title": "Arithmetic & Binary Conversion", "focus": "Work through number logic, divisibility, and base conversion step by step." },
+    { "id": "arrays", "title": "Arrays", "focus": "Scan, update, and summarize arrays without index mistakes." }
+  ],
+  "questions": [
+    {
+      "id": "algo-i001",
+      "code": "algo-i001",
+      "unitId": "algorithms",
+      "chapterId": "input-parsing",
+      "prompt": "For competitive-style Java input, which base setup is the strongest default to memorize first?",
+      "codeSnippet": "// goal: fast enough for many interview / CP input problems\n// choose the base setup you should know cold",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "BufferedReader + StringTokenizer + StringBuilder" },
+        { "id": "b", "label": "JOptionPane dialogs for each number" },
+        { "id": "c", "label": "Recursive input parsing methods only" },
+        { "id": "d", "label": "Random access files for every coding problem" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "If you want one Java I/O toolkit to memorize for interviews and competitive programming, BufferedReader for input, StringTokenizer for token splitting, and StringBuilder for output is the strongest default.",
+      "studyNote": "Canonical fast-I/O setup\n\nimport java.io.*;\nimport java.util.*;\n\nBufferedReader br = new BufferedReader(new InputStreamReader(System.in));\nStringBuilder out = new StringBuilder();",
+      "estimatedSeconds": 30
+    },
+    {
+      "id": "algo-i002",
+      "code": "algo-i002",
+      "unitId": "algorithms",
+      "chapterId": "input-parsing",
+      "prompt": "You need to read two integers from one line like `5 9`. Which code pattern should you memorize?",
+      "codeSnippet": "BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\n// input line: 5 9",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "StringTokenizer st = new StringTokenizer(br.readLine()); int a = Integer.parseInt(st.nextToken()); int b = Integer.parseInt(st.nextToken());" },
+        { "id": "b", "label": "int a = br.readLine(); int b = br.readLine();" },
+        { "id": "c", "label": "StringTokenizer st = new StringTokenizer(); int a = st; int b = st;" },
+        { "id": "d", "label": "int a = Integer.parseInt(br); int b = Integer.parseInt(br);" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "This is the bread-and-butter pattern: read the line, tokenize it, then parse each token into the target type.",
+      "studyNote": "Read multiple ints from one line\n\nStringTokenizer st = new StringTokenizer(br.readLine());\nint a = Integer.parseInt(st.nextToken());\nint b = Integer.parseInt(st.nextToken());",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "algo-i003",
+      "code": "algo-i003",
+      "unitId": "algorithms",
+      "chapterId": "input-parsing",
+      "prompt": "You are given `n`, then a second line with `n` space-separated integers. What pattern is correct?",
+      "codeSnippet": "// input example:\n// 5\n// 10 20 30 40 50",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "Read n, create int[] arr = new int[n], tokenize the next line, fill arr in a loop" },
+        { "id": "b", "label": "Read n and assume Java fills the array automatically from stdin" },
+        { "id": "c", "label": "Only parse the first token because arrays can resize later" },
+        { "id": "d", "label": "Sort before reading the values" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "A lot of problems use the exact pattern: read size first, then tokenize the next line and fill the array sequentially.",
+      "studyNote": "Read an array template\n\nint n = Integer.parseInt(br.readLine());\nint[] arr = new int[n];\nStringTokenizer st = new StringTokenizer(br.readLine());\n\nfor (int i = 0; i < n; i++) {\n    arr[i] = Integer.parseInt(st.nextToken());\n}",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "algo-i004",
+      "code": "algo-i004",
+      "unitId": "algorithms",
+      "chapterId": "input-parsing",
+      "prompt": "Many problems begin with a test-case count `t`. Which loop structure should feel automatic?",
+      "codeSnippet": "// first line contains t\n// solve one case per iteration",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "int t = Integer.parseInt(br.readLine()); while (t-- > 0) { /* solve one case */ }" },
+        { "id": "b", "label": "int t = Integer.parseInt(br.readLine()); if (t > 0) { /* solve all cases once */ }" },
+        { "id": "c", "label": "int t = Integer.parseInt(br.readLine()); for (;;) { /* stop when lucky */ }" },
+        { "id": "d", "label": "No loop is needed because t is only metadata" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "When a problem gives a test-case count, your body template should already be ready. The exact loop form can vary, but `while (t-- > 0)` is a standard one worth memorizing.",
+      "studyNote": "Test-case loop template\n\nint t = Integer.parseInt(br.readLine());\n\nwhile (t-- > 0) {\n    // read this case\n    // solve this case\n    // append output\n}",
+      "estimatedSeconds": 30
+    },
+    {
+      "id": "algo-i005",
+      "code": "algo-i005",
+      "unitId": "algorithms",
+      "chapterId": "input-parsing",
+      "prompt": "Why is `StringBuilder` important in Java I/O-heavy problems?",
+      "codeSnippet": "// imagine printing one answer per test case",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "It helps accumulate output efficiently before printing once" },
+        { "id": "b", "label": "It is useful for building strings in loops without repeated costly concatenation" },
+        { "id": "c", "label": "It automatically parses integers from input" },
+        { "id": "d", "label": "It is often cleaner than many System.out.println calls inside tight loops" }
+      ],
+      "correctChoiceIds": ["a", "b", "d"],
+      "explanation": "StringBuilder is mainly about output construction efficiency and cleaner repeated string assembly. It is not an input parser.",
+      "studyNote": "Output accumulation template\n\nStringBuilder out = new StringBuilder();\n\nout.append(answer).append('\\n');\nout.append(otherAnswer).append('\\n');\n\nSystem.out.print(out);",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "algo-i006",
+      "code": "algo-i006",
+      "unitId": "algorithms",
+      "chapterId": "input-parsing",
+      "prompt": "Which first-principles checklist is strongest when reading a new Java input format?",
+      "codeSnippet": "// before coding the solution, decode the input shape",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "How many lines or tokens belong to one test case?" },
+        { "id": "b", "label": "What type is each token: int, long, string, char?" },
+        { "id": "c", "label": "Do I need an array, matrix, or just scalar variables?" },
+        { "id": "d", "label": "Can I ignore the input format and improvise later?" }
+      ],
+      "correctChoiceIds": ["a", "b", "c"],
+      "explanation": "Good Java problem solving starts by decoding the input contract. Once you know the tokens, their types, and the per-case shape, the parsing code becomes mechanical.",
+      "studyNote": "Input decoding checklist\n\nAsk first:\n1. Is there a test-case count?\n2. What does one case contain?\n3. Which tokens are ints / longs / strings?\n4. Do I need scalar variables, an array, or a matrix?\n5. Which line should be tokenized next?",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "algo-s001",
+      "code": "algo-s001",
+      "unitId": "algorithms",
+      "chapterId": "numbers",
+      "prompt": "What is the right way to complete this leap-year style problem in Java?",
+      "codeSnippet": "boolean isLeapYear(int year) {\n    // choose the right structure here\n}",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "A direct if / else-if / else chain that encodes the stated rules" },
+        { "id": "b", "label": "A nested loop because every decision problem needs iteration" },
+        { "id": "c", "label": "A recursive method because it looks more advanced" },
+        { "id": "d", "label": "A HashMap because rule checks should be data-driven by default" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "For rule-based problems like leap year, the right move is usually a direct conditional chain that mirrors the stated logic instead of forcing in loops or more advanced structures.",
+      "studyNote": "Canonical Java number-decision template\n\nboolean isLeapYear(int year) {\n    if (year % 400 == 0) {\n        return true;\n    } else if (year % 100 == 0) {\n        return false;\n    } else {\n        return year % 4 == 0;\n    }\n}\n\nNumber problems to master from memory:\n- even / odd\n- leap year\n- prime number\n- palindrome number\n- factorial\n- Fibonacci\n- sum of digits\n- reverse digits\n- GCD / LCM\n- factors / divisors",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "algo-m002",
+      "code": "algo-m002",
+      "unitId": "algorithms",
+      "chapterId": "string-manipulation",
+      "prompt": "You need to reverse a string and also solve many similar rebuilding tasks. Which Java tools/patterns should be in your base kit?",
+      "codeSnippet": "String reverse(String s) {\n    // fill in the standard Java approach\n}",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "Know when to use charAt and length safely" },
+        { "id": "b", "label": "Track indices carefully when comparing from both ends" },
+        { "id": "c", "label": "Convert every string problem into recursion first" },
+        { "id": "d", "label": "Use StringBuilder when repeatedly constructing output" }
+      ],
+      "correctChoiceIds": ["a", "b", "d"],
+      "explanation": "String questions are usually about safe indexing, clean comparisons, and not doing expensive string concatenation carelessly in loops.",
+      "studyNote": "Canonical Java palindrome-string template\n\nboolean isPalindrome(String s) {\n    int left = 0;\n    int right = s.length() - 1;\n\n    while (left < right) {\n        if (s.charAt(left) != s.charAt(right)) {\n            return false;\n        }\n        left++;\n        right--;\n    }\n\n    return true;\n}\n\nAlso rehearse:\n- counting vowels\n- reversing a string with StringBuilder\n- checking character frequency with loops",
+      "estimatedSeconds": 40
+    },
+    {
+      "id": "algo-s003",
+      "code": "algo-s003",
+      "unitId": "algorithms",
+      "chapterId": "arithmetic-binary",
+      "prompt": "Which code pattern should you memorize for manual decimal-to-binary conversion in Java?",
+      "codeSnippet": "String toBinary(int n) {\n    // build the binary representation yourself\n}",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "Repeatedly divide by 2, append remainder, then reverse" },
+        { "id": "b", "label": "Sort the digits first, then join them" },
+        { "id": "c", "label": "Use nested loops because base conversion needs two dimensions" },
+        { "id": "d", "label": "Convert the number to a char array before doing arithmetic" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "For manual binary conversion, the standard interview-safe loop is divide by 2, record remainders, then reverse the collected digits.",
+      "studyNote": "Canonical Java decimal-to-binary template\n\nString toBinary(int n) {\n    if (n == 0) {\n        return \"0\";\n    }\n\n    StringBuilder bits = new StringBuilder();\n\n    while (n > 0) {\n        bits.append(n % 2);\n        n /= 2;\n    }\n\n    return bits.reverse().toString();\n}\n\nAlso know:\n- n % 2 checks odd/even\n- n / 10 and n % 10 for digit problems",
+      "estimatedSeconds": 35
+    },
+    {
+      "id": "algo-m004",
+      "code": "algo-m004",
+      "unitId": "algorithms",
+      "chapterId": "arrays",
+      "prompt": "For beginner array problems in Java, which tools and habits are worth memorizing first?",
+      "codeSnippet": "int maxValue(int[] nums) {\n    // write the standard array scan\n}",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "Use a for loop or enhanced for loop to scan once" },
+        { "id": "b", "label": "Know Arrays.sort for ordering-based solutions" },
+        { "id": "c", "label": "Convert every array into recursion before scanning" },
+        { "id": "d", "label": "Track running state like min, max, sum, or count" }
+      ],
+      "correctChoiceIds": ["a", "b", "d"],
+      "explanation": "Most beginner array problems are solved with one clean scan, optional sorting via Arrays.sort, and disciplined running-state updates.",
+      "studyNote": "Canonical Java array scan template\n\nint maxValue(int[] nums) {\n    int best = nums[0];\n\n    for (int i = 1; i < nums.length; i++) {\n        if (nums[i] > best) {\n            best = nums[i];\n        }\n    }\n\n    return best;\n}\n\nLibrary habits to memorize:\n- Arrays.sort(nums)\n- Arrays.toString(nums)\n- nums.length\n- enhanced for loops for read-only scans",
+      "estimatedSeconds": 40
+    }
+  ]
+}

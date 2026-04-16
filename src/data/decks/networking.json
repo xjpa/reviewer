@@ -1,0 +1,89 @@
+{
+  "id": "networking",
+  "title": "Networking",
+  "description": "Build the network model needed to debug common connectivity and web-service issues.",
+  "reviewer": {
+    "summary": "Networking gets easier once you stop treating it as trivia. The interview goal is to reason layer by layer: naming, routing, ports, load balancing, and request flow.",
+    "interviewFocus": [
+      "Can you localize the failing layer quickly?",
+      "Do you know when the problem is DNS vs routing vs firewall vs application?",
+      "Can you explain HTTP and TLS behavior at a usable level?",
+      "Can you troubleshoot in an ordered way instead of guessing?"
+    ],
+    "sections": [
+      {
+        "id": "must-know",
+        "title": "Must Know In Time For Interviews",
+        "points": [
+          "Be clear on DNS, IP addressing, ports, firewalls, routing, and load balancers.",
+          "Understand what changes when access by IP works but access by hostname fails.",
+          "Know the difference between the service not listening and the network path being blocked."
+        ]
+      },
+      {
+        "id": "sequence",
+        "title": "Suggested Crash-Course Sequence",
+        "points": [
+          "Learn TCP-IP basics, then DNS and HTTP, then ports and firewalls.",
+          "After that, practice routing and load balancer scenarios.",
+          "Finish with structured troubleshooting drills across multiple layers."
+        ]
+      },
+      {
+        "id": "mistakes",
+        "title": "What Usually Fails People",
+        "points": [
+          "Jumping to application bugs before verifying network path basics.",
+          "Confusing DNS failure with TCP connectivity failure.",
+          "Using layer terms they do not actually understand."
+        ]
+      }
+    ]
+  },
+  "chapters": [
+    { "id": "tcp-ip", "title": "OSI / TCP-IP Basics", "focus": "Know what problem lives at which layer." },
+    { "id": "ip-subnets", "title": "IP Addressing & Subnets", "focus": "Reason about hosts, ranges, and reachability." },
+    { "id": "dns", "title": "DNS", "focus": "Translate names to addresses and debug resolution failures." },
+    { "id": "http", "title": "HTTP / HTTPS", "focus": "Understand request flow, status codes, and TLS basics." },
+    { "id": "routing", "title": "Routing", "focus": "Know where packets go and why they do not arrive." },
+    { "id": "load-balancing", "title": "Load Balancing", "focus": "Distribute traffic without hiding bottlenecks." },
+    { "id": "ports-firewalls", "title": "Ports & Firewalls", "focus": "Allow intended traffic and block the rest." },
+    { "id": "debugging", "title": "Connectivity Debugging", "focus": "Use the right tool for the failing layer." }
+  ],
+  "questions": [
+    {
+      "id": "net-s001",
+      "code": "net-s001",
+      "unitId": "networking",
+      "chapterId": "dns",
+      "prompt": "A service URL fails in the browser, but direct IP access works. Which layer should you inspect first?",
+      "type": "single",
+      "choices": [
+        { "id": "a", "label": "DNS resolution" },
+        { "id": "b", "label": "Disk I/O scheduling" },
+        { "id": "c", "label": "CPU instruction cache" },
+        { "id": "d", "label": "Database indexing" }
+      ],
+      "correctChoiceIds": ["a"],
+      "explanation": "If the IP works but the hostname does not, name resolution is the first suspect until proven otherwise.",
+      "estimatedSeconds": 25
+    },
+    {
+      "id": "net-m002",
+      "code": "net-m002",
+      "unitId": "networking",
+      "chapterId": "ports-firewalls",
+      "prompt": "A service listens on port 443 but clients still cannot connect. Which checks make sense next?",
+      "type": "multi",
+      "choices": [
+        { "id": "a", "label": "Verify firewall rules and security groups" },
+        { "id": "b", "label": "Confirm the service is bound to the expected interface" },
+        { "id": "c", "label": "Rename the server hostname to something shorter" },
+        { "id": "d", "label": "Test whether the route and load balancer path are open" }
+      ],
+      "correctChoiceIds": ["a", "b", "d"],
+      "explanation": "Open application code is not enough. Traffic can still fail because of binding, routing, or firewall policy.",
+      "estimatedSeconds": 40
+    }
+  ]
+}
